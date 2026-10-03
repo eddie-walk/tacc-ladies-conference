@@ -251,9 +251,6 @@ export default function HomePage() {
                 <p className="when">
                   {EVENT.when}, {EVENT.time}
                 </p>
-                <p className="sense">
-                  Women across industries learning from women already making their mark, and the woman behind the work: femininity, friendships, self-care, personal growth.
-                </p>
                 <div className="nav">
                   <button className="forward" type="button" onClick={() => go("her", 0)}>
                     Continue <span aria-hidden="true">→</span>
