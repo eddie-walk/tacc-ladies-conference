@@ -239,6 +239,8 @@ export default function HomePage() {
                   <i />
                   <i />
                   <i />
+                  <i />
+                  <i />
                 </div>
                 <p className="kicker">{EVENT.name}</p>
                 <h1>

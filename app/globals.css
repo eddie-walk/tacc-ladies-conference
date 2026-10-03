@@ -192,16 +192,19 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   transition: transform 0.35s ease, opacity 0.35s ease, color 0.35s ease;
 }
 .public .phrase .touch svg { width: 16px; height: 16px; display: block; }
-.public h1 em,
-.public .phrase,
-.public .echo {
+.public h1 em {
   font-family: var(--font-script), "Allura", cursive;
   font-weight: 400;
-}
-.public h1 em {
   font-style: normal;
   font-size: 1.12em;
   line-height: 1.05;
+  color: var(--plum);
+}
+.public .phrase,
+.public .echo {
+  font-family: var(--font-serif), "Cormorant Garamond", serif;
+  font-style: italic;
+  font-weight: 500;
   color: var(--plum);
 }
 .public .phrase.on {
@@ -218,16 +221,14 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 .public .echo {
   margin: 0 auto 8px;
   max-width: 16em;
-  font-style: normal;
-  font-weight: 400;
   font-size: clamp(28px, 4vw, 40px);
   line-height: 1.15;
-  color: var(--plum);
 }
 .public h1 em,
 .public .phrase.marked > span {
   position: relative;
   z-index: 0;
+  isolation: isolate;
 }
 .public h1 em::before,
 .public .phrase.marked > span::before {
@@ -237,22 +238,22 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   pointer-events: none;
 }
 .public h1 em::before {
-  left: -8%;
-  right: -4%;
-  top: 46%;
-  height: 0.38em;
-  background: rgba(233, 214, 241, 0.95);
-  border-radius: 42% 58% 46% 54% / 70% 30% 80% 20%;
-  transform: rotate(-2.5deg);
+  left: -14%;
+  right: -10%;
+  top: 18%;
+  height: 0.72em;
+  background: #E9D6F1;
+  border-radius: 40% 60% 48% 52% / 80% 20% 85% 15%;
+  transform: rotate(-3deg);
 }
 .public .phrase.marked > span::before {
-  left: -1%;
-  right: 2%;
-  top: 52%;
-  height: 0.34em;
-  background: rgba(196, 164, 106, 0.32);
-  border-radius: 46% 54% 40% 60% / 65% 35% 70% 30%;
-  transform: rotate(1.8deg);
+  left: -3%;
+  right: -2%;
+  top: 18%;
+  height: 0.7em;
+  background: rgba(196, 164, 106, 0.55);
+  border-radius: 46% 54% 42% 58% / 75% 25% 80% 20%;
+  transform: rotate(2deg);
 }
 .public .glitter {
   position: absolute;
@@ -262,20 +263,26 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 }
 .public .glitter i {
   position: absolute;
-  width: 5px;
-  height: 5px;
+  width: 12px;
+  height: 12px;
   background: var(--gold);
-  clip-path: polygon(50% 0%, 62% 36%, 100% 38%, 68% 58%, 78% 96%, 50% 72%, 22% 96%, 32% 58%, 0 38%, 38% 36%);
-  opacity: 0.8;
-  animation: twinkle 4.2s ease-in-out infinite;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: twinkle 3.8s ease-in-out infinite;
 }
-.public .glitter i:nth-child(1) { top: 22%; left: 9%; }
-.public .glitter i:nth-child(2) { top: 34%; left: 16%; width: 3px; height: 3px; border-radius: 50%; clip-path: none; animation-delay: 1.1s; }
-.public .glitter i:nth-child(3) { top: 18%; right: 11%; width: 4px; height: 4px; animation-delay: 0.6s; }
-.public .glitter i:nth-child(4) { top: 30%; right: 18%; width: 3px; height: 3px; border-radius: 50%; clip-path: none; opacity: 0.65; animation-delay: 1.8s; }
+.public .glitter i:nth-child(even) {
+  width: 9px;
+  height: 9px;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0 50%);
+}
+.public .glitter i:nth-child(1) { top: 16%; left: 6%; }
+.public .glitter i:nth-child(2) { top: 38%; left: 13%; animation-delay: 0.8s; }
+.public .glitter i:nth-child(3) { top: 54%; left: 8%; width: 8px; height: 8px; animation-delay: 1.6s; }
+.public .glitter i:nth-child(4) { top: 14%; right: 7%; width: 13px; height: 13px; animation-delay: 0.4s; }
+.public .glitter i:nth-child(5) { top: 36%; right: 12%; animation-delay: 1.3s; }
+.public .glitter i:nth-child(6) { top: 11%; left: 70%; width: 8px; height: 8px; animation-delay: 2s; }
 @keyframes twinkle {
-  0%, 100% { opacity: 0.75; }
-  50% { opacity: 0.28; }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
 }
 .public .measure {
   display: grid;
