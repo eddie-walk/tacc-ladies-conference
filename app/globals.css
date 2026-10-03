@@ -1,4 +1,6 @@
 :root {
+  --font-outfit: "Outfit";
+  --font-serif: "Cormorant Garamond";
   --plum: #4E2D5A;
   --plum-deep: #3B2144;
   --ink: #3A2742;
@@ -30,125 +32,165 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   outline-offset: 2px;
 }
 
+
 .public .wrap {
-  width: min(1080px, calc(100% - 32px));
+  width: min(1160px, calc(100% - 32px));
   margin: 0 auto;
-  padding: 28px 0 48px;
+  padding: 28px 0 64px;
 }
-.public .stage { display: grid; gap: 22px; }
-.public .hero, .public .panel, .public .done-card {
-  background: var(--card);
+.public .steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 440px;
+  margin: 0 auto 22px;
+}
+.public .step-line {
+  position: absolute;
+  left: 16%;
+  right: 16%;
+  top: 11px;
+  height: 1px;
+  background: rgba(196, 164, 106, 0.45);
+}
+.public .step-line i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--gold);
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+.public .step {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  z-index: 1;
+}
+.public .bloom {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--cream);
+  color: var(--lilac);
+}
+.public .bloom svg { width: 16px; height: 16px; display: block; }
+.public .step.now .bloom { color: var(--gold); }
+.public .step.done .bloom { color: var(--plum); }
+.public .step span {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  font-weight: 500;
+}
+.public .step.now span { color: var(--plum); }
+.public .card {
+  background:
+    linear-gradient(180deg, rgba(244, 233, 248, 0.45), rgba(255, 252, 248, 0.15) 38%),
+    var(--card);
   border-radius: 28px;
   box-shadow: var(--shadow);
   position: relative;
   overflow: hidden;
-}
-.public .hero {
-  background:
-    linear-gradient(180deg, rgba(244, 233, 248, 0.55), rgba(255, 252, 248, 0.2) 42%),
-    var(--card);
-  padding: 36px 22px 28px;
+  padding: 64px 22px 32px;
   text-align: center;
+  animation: rise 0.45s ease;
 }
-.public .floral { position: absolute; pointer-events: none; }
-.public .floral.tl { top: -8px; left: -10px; }
-.public .floral.tr { top: -8px; right: -10px; transform: scaleX(-1); }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: none; }
+}
+.public .floral { position: absolute; pointer-events: none; width: 180px; height: auto; }
+.public .floral.tl { top: -26px; left: -30px; }
+.public .floral.tr { top: -26px; right: -30px; transform: scaleX(-1); }
 .public .kicker {
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
   color: var(--plum);
-  margin: 8px 0 10px;
+  margin: 4px 0 16px;
+}
+.public h1, .public h2, .public .phrase, .public .seat-name, .public .invite-card h2 {
+  font-family: var(--font-serif), "Cormorant Garamond", serif;
+  color: var(--plum);
 }
 .public h1 {
-  font-family: var(--font-serif), "Cormorant Garamond", serif;
   font-weight: 600;
-  font-size: clamp(52px, 10vw, 84px);
+  font-size: clamp(60px, 12vw, 96px);
   line-height: 0.9;
-  color: var(--plum);
   margin: 0;
 }
-.public h1 em { font-style: italic; font-weight: 500; }
-.public .tagline {
-  font-family: var(--font-serif), "Cormorant Garamond", serif;
-  font-style: italic;
-  font-size: 22px;
-  color: var(--gold-deep);
-  margin: 10px 0 18px;
+.public h1 em, .public h2 em { font-style: italic; font-weight: 500; }
+.public h2 {
+  font-weight: 600;
+  font-size: clamp(40px, 6vw, 64px);
+  line-height: 0.95;
+  margin: 0;
 }
-.public .pills { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-.public .pill {
+.public .when {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  background: #fff;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 8px 14px;
-  font-size: 13px;
+  margin: 20px 0 0;
   color: var(--plum);
+  font-size: 15px;
 }
-.public .invite { margin-top: 26px; }
-.public .invite h2 {
-  font-family: var(--font-serif), "Cormorant Garamond", serif;
-  font-size: 34px;
-  font-weight: 600;
-  margin: 0 0 6px;
-  color: var(--plum);
-}
-.public .invite p {
-  margin: 0 auto;
-  max-width: 340px;
+.public .lede, .public .quiet {
+  margin: 22px auto 0;
+  max-width: 62ch;
   color: var(--muted);
   font-weight: 300;
-  font-size: 15px;
-  line-height: 1.45;
+  font-size: 17px;
+  line-height: 1.6;
 }
-.public .tickets { display: grid; gap: 12px; margin-top: 18px; text-align: left; }
-.public .ticket {
+.public .quiet { font-size: 16px; margin-top: 10px; }
+.public .lines {
   display: grid;
-  grid-template-columns: 1fr auto auto;
   gap: 12px;
-  align-items: center;
+  margin: 32px auto 0;
+  max-width: 820px;
+}
+.public .phrase {
+  appearance: none;
   width: 100%;
   border: 0;
-  background: #fff;
-  border-radius: 18px;
-  padding: 16px;
   cursor: pointer;
-  box-shadow: inset 0 0 0 1px var(--line);
-  text-align: left;
-  color: inherit;
-}
-.public .ticket.selected {
-  box-shadow: inset 0 0 0 1.5px var(--gold);
-  background: linear-gradient(180deg, #fff, #fbf7f1);
-}
-.public .ticket .name { font-weight: 500; font-size: 16px; }
-.public .ticket .note { display: block; margin-top: 3px; color: var(--gold-deep); font-size: 12px; font-weight: 500; }
-.public .ticket .price {
-  font-family: var(--font-serif), "Cormorant Garamond", serif;
-  font-size: 28px;
+  background: rgba(255, 255, 255, 0.72);
   color: var(--plum);
-  font-weight: 600;
+  border-radius: 22px;
+  padding: 22px 18px;
+  font-size: clamp(26px, 4vw, 40px);
+  line-height: 1.15;
+  font-weight: 500;
+  box-shadow: inset 0 0 0 1px var(--line);
+  text-align: center;
 }
-.public .radio {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  border: 1.5px solid #d9cfe0;
+.public .phrase.on {
+  background: var(--lilac);
+  box-shadow: inset 0 0 0 1.5px var(--gold);
+}
+.public .phrase:nth-child(4) { font-size: clamp(22px, 3.2vw, 32px); letter-spacing: 0.06em; }
+.public .phrase:nth-child(5) { font-style: italic; color: var(--gold-deep); }
+.public .phrase:nth-child(5).on { color: var(--plum); }
+.public .measure {
   display: grid;
-  place-items: center;
+  gap: 14px;
+  text-align: left;
+  max-width: 640px;
+  margin: 8px auto 0;
 }
-.public .ticket.selected .radio { border-color: var(--plum); }
-.public .ticket.selected .radio span {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--plum);
+.public .nav {
+  display: flex;
+  gap: 10px;
+  max-width: 640px;
+  margin: 22px auto 0;
 }
-.public .actions { margin-top: 18px; }
 .public .btn {
   appearance: none;
   border: 0;
@@ -164,36 +206,26 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  font-family: var(--font-outfit), "Outfit", sans-serif;
+}
+.public .btn.ghost {
+  width: auto;
+  min-width: 108px;
+  background: transparent;
+  color: var(--plum);
+  box-shadow: inset 0 0 0 1.5px rgba(78, 45, 90, 0.2);
 }
 .public .btn:disabled { opacity: 0.55; cursor: wait; }
-.public .whisper {
-  margin: 14px 0 0;
-  font-family: var(--font-serif), "Cormorant Garamond", serif;
-  font-style: italic;
-  color: var(--gold-deep);
-  font-size: 16px;
-}
-.public .panel { padding: 26px 20px 22px; display: none; }
-.public.show-details .panel { display: block; }
-.public .panel h3 {
-  margin: 0 0 14px;
-  letter-spacing: 0.16em;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--plum);
-}
-.public .grid { display: grid; gap: 12px; }
-.public .stack { display: grid; gap: 12px; margin-top: 14px; }
-.public label.field {
+.public label.field, .public .field {
   display: grid;
-  gap: 6px;
+  gap: 8px;
   font-size: 12px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--muted);
   font-weight: 500;
 }
-.public label.field .opt {
+.public label.field .opt, .public .field .opt {
   text-transform: none;
   letter-spacing: 0;
   font-weight: 400;
@@ -201,8 +233,7 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 }
 .public input[type="text"],
 .public input[type="email"],
-.public input[type="tel"],
-.public select {
+.public input[type="tel"] {
   width: 100%;
   border: 1px solid var(--line);
   background: #fff;
@@ -214,8 +245,9 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   text-transform: none;
   letter-spacing: 0;
   font-weight: 400;
+  font-family: var(--font-outfit), "Outfit", sans-serif;
 }
-.public input:focus, .public select:focus {
+.public input:focus {
   border-color: var(--gold);
   box-shadow: 0 0 0 3px rgba(196, 164, 106, 0.25);
 }
@@ -225,12 +257,13 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   background: #fff;
   color: var(--plum);
   border-radius: 999px;
-  padding: 8px 12px;
-  font-size: 13px;
+  padding: 10px 14px;
+  font-size: 14px;
   letter-spacing: 0;
   text-transform: none;
   font-weight: 400;
   cursor: pointer;
+  font-family: var(--font-outfit), "Outfit", sans-serif;
 }
 .public .chip.on { background: var(--plum); color: #fff; border-color: var(--plum); }
 .public .error {
@@ -240,59 +273,114 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   border-radius: 12px;
   padding: 10px 12px;
   font-size: 14px;
-  margin-bottom: 12px;
+  margin: 16px auto 0;
+  max-width: 640px;
+  text-align: left;
 }
 .public .error.show { display: block; }
+.public .tickets {
+  display: grid;
+  gap: 12px;
+  margin: 26px auto 0;
+  max-width: 920px;
+  text-align: left;
+}
+.public .ticket {
+  display: grid;
+  gap: 6px;
+  width: 100%;
+  border: 0;
+  background: #fff;
+  border-radius: 22px;
+  padding: 18px 16px 16px;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 1px var(--line);
+  text-align: left;
+  color: inherit;
+  font-family: inherit;
+}
+.public .ticket.selected {
+  box-shadow: inset 0 0 0 1.5px var(--gold);
+  background: linear-gradient(180deg, #fff, #fbf7f1);
+}
+.public .marks { display: flex; gap: 5px; min-height: 14px; }
+.public .marks i {
+  width: 8px;
+  height: 12px;
+  border-radius: 8px 8px 8px 2px;
+  background: var(--lilac);
+  transform: rotate(-18deg);
+}
+.public .ticket.selected .marks i { background: var(--gold); }
+.public .ticket .name { font-weight: 500; font-size: 16px; color: var(--plum); }
+.public .ticket .price {
+  font-family: var(--font-serif), "Cormorant Garamond", serif;
+  font-size: 32px;
+  color: var(--plum);
+  font-weight: 600;
+  line-height: 1;
+}
+.public .ticket .note { color: var(--gold-deep); font-size: 12px; font-weight: 500; }
+.public .circle {
+  display: grid;
+  gap: 12px;
+  max-width: 640px;
+  margin: 22px auto 0;
+  text-align: left;
+}
+.public .circle > p {
+  margin: 0;
+  font-family: var(--font-serif), "Cormorant Garamond", serif;
+  font-size: 28px;
+  color: var(--plum);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+}
 .public .fine {
   text-align: center;
   color: var(--muted);
   font-size: 13px;
   font-weight: 300;
-  margin: 10px 0 0;
+  margin: 12px auto 0;
+  max-width: 420px;
   line-height: 1.45;
 }
-.public .done { display: none; }
-.public.is-done .stage { display: none; }
-.public.is-done .done { display: block; }
-.public .done-card {
-  background: linear-gradient(180deg, #f6eef8, #fffdfb 46%);
-  padding: 42px 22px 28px;
-  text-align: center;
-}
-.public .check {
-  width: 64px;
-  height: 64px;
-  margin: 0 auto 8px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: #fff;
-  box-shadow: 0 8px 24px rgba(78, 45, 90, 0.08);
-  color: var(--plum);
-}
-.public .done-card h2 {
+.public .whisper {
+  margin: 22px 0 0;
   font-family: var(--font-serif), "Cormorant Garamond", serif;
-  font-weight: 600;
-  font-size: clamp(42px, 8vw, 64px);
-  line-height: 0.95;
-  color: var(--plum);
-  margin: 8px 0 18px;
+  font-style: italic;
+  color: var(--gold-deep);
+  font-size: 20px;
 }
-.public .ref {
+.public .invite-card { padding-top: 72px; padding-bottom: 40px; }
+.public .seat-card {
   background: #fff;
-  border-radius: 22px;
-  padding: 22px 16px;
+  border-radius: 24px;
+  padding: 28px 18px 22px;
   box-shadow: inset 0 0 0 1px var(--line);
   max-width: 460px;
-  margin: 0 auto;
+  margin: 26px auto 0;
 }
-.public .ref .lbl {
+.public .seat-name {
+  margin: 0;
+  font-size: clamp(32px, 6vw, 44px);
+  line-height: 1;
+  font-weight: 600;
+}
+.public .seat-kind, .public .with {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+.public .lbl {
+  margin-top: 18px;
   letter-spacing: 0.18em;
   font-size: 11px;
   color: var(--gold-deep);
   font-weight: 600;
 }
-.public .ref strong {
+.public .seat-card strong {
   display: block;
   margin-top: 6px;
   font-family: var(--font-serif), "Cormorant Garamond", serif;
@@ -301,7 +389,7 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   color: var(--plum);
   font-weight: 600;
 }
-.public .ref p { margin: 8px 0 0; color: var(--muted); font-size: 14px; line-height: 1.45; }
+.public .seat-card p:last-child { margin: 10px 0 0; color: var(--muted); font-size: 14px; line-height: 1.5; }
 .public .status-pill {
   display: inline-flex;
   margin-top: 12px;
@@ -316,18 +404,22 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 }
 
 @media (min-width: 900px) {
-  .public .wrap { padding-top: 42px; }
-  .public .stage {
-    grid-template-columns: 0.92fr 1.08fr;
-    align-items: start;
+  .public .wrap {
+    width: min(1160px, calc(100% - 80px));
+    padding: 56px 0 88px;
   }
-  .public .hero { text-align: left; padding: 48px 40px; }
-  .public .pills { justify-content: flex-start; }
-  .public .invite p { margin: 0; }
-  .public .hero .actions { display: none; }
-  .public .panel { display: block; padding: 32px 28px; }
-  .public .grid.two { grid-template-columns: 1fr 1fr; }
-  .public h1 { font-size: 86px; }
+  .public .steps { margin-bottom: 28px; }
+  .public .card { padding: 88px 72px 56px; }
+  .public .floral { width: 240px; }
+  .public .floral.tl { top: -32px; left: -18px; }
+  .public .floral.tr { top: -32px; right: -18px; }
+  .public h1 { font-size: 112px; }
+  .public .lede { margin-top: 28px; font-size: 18px; }
+  .public .lines { gap: 14px; margin-top: 40px; }
+  .public .phrase { padding: 26px 28px; }
+  .public .tickets { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .public .ticket { min-height: 168px; align-content: space-between; }
+  .public .nav { margin-top: 28px; }
 }
 
 .admin {
