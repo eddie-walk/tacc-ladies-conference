@@ -446,22 +446,80 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 @media (min-width: 900px) {
   .public .wrap {
     width: min(1160px, calc(100% - 80px));
-    padding: 56px 0 88px;
+    padding: 16px 0 40px;
   }
-  .public .steps { margin-bottom: 28px; }
-  .public .card { padding: 104px 88px 80px; }
-  .public .floral { width: 460px; }
-  .public .floral.tl { top: -28px; left: -36px; }
-  .public .floral.tr { top: -28px; right: -36px; }
-  .public .floral.bl { bottom: -48px; left: -30px; }
-  .public .floral.br { bottom: -48px; right: -30px; }
-  .public h1 { font-size: 112px; }
-  .public .lede { margin-top: 28px; font-size: 18px; }
-  .public .lines { gap: 14px; margin-top: 40px; }
-  .public .phrase { padding: 26px 28px; }
+  .public .steps { margin-bottom: 10px; }
+  .public .card { padding: 72px 56px 48px; }
+  .public .floral { width: 300px; }
+  .public .floral.tl { top: -12px; left: -8px; }
+  .public .floral.tr { top: -12px; right: -8px; }
+  .public .floral.bl { bottom: -20px; left: -8px; }
+  .public .floral.br { bottom: -20px; right: -8px; }
   .public .tickets { grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .public .ticket { min-height: 168px; align-content: space-between; }
-  .public .nav { margin-top: 28px; }
+  .public .nav { margin-top: 22px; }
+
+  .public .story {
+    display: grid;
+    grid-template-columns: 210px minmax(0, 640px) 210px;
+    justify-content: center;
+    align-items: center;
+    column-gap: 12px;
+    padding: 18px 28px 16px;
+  }
+  .public .story .floral {
+    position: relative;
+    width: 210px;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+  }
+  .public .story .floral.tl {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    justify-self: end;
+    align-self: center;
+    transform: none;
+  }
+  .public .story .floral.tr {
+    grid-column: 3;
+    grid-row: 1 / span 2;
+    justify-self: start;
+    align-self: center;
+    transform: scaleX(-1);
+  }
+  .public .story .floral.bl,
+  .public .story .floral.br { display: none; }
+  .public .story .kicker {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: end;
+    margin: 0 0 4px;
+  }
+  .public .story h1 {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: start;
+    font-size: 64px;
+    line-height: 0.88;
+  }
+  .public .story .when,
+  .public .story .lede,
+  .public .story .lines,
+  .public .story .nav { grid-column: 1 / -1; }
+  .public .story .when { margin-top: 8px; font-size: 15px; }
+  .public .story .lede {
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 1.4;
+    max-width: 62ch;
+  }
+  .public .story .lines { gap: 0; margin-top: 8px; max-width: 760px; }
+  .public .story .phrase { padding: 2px 8px; font-size: 24px; line-height: 1.15; }
+  .public .story .phrase:nth-child(4) { font-size: 20px; letter-spacing: 0.05em; }
+  .public .story .nav { margin-top: 10px; max-width: 280px; }
+  .public .story .btn { padding: 12px 18px; }
 }
 
 .admin {
