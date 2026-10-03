@@ -29,49 +29,25 @@ const BEATS: { id: BeatId; line: (typeof LINES)[number] }[] = [
   { id: "lab", line: LINES[4] },
 ];
 
-const STARS = ["s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11", "s12", "s13", "s14", "s15", "s16"] as const;
-
-function Vine({ className }: { className: string }) {
+function Sprig() {
   return (
-    <svg className={className} viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
-      <path d="M-20 46C120 8 220 72 360 34s220-28 340 8 250 40 390-6 220-30 370 10" stroke="#C4A46A" strokeWidth="1.6" fill="none" />
-      <path d="M-20 58C160 28 260 74 420 46s240-20 360 12 230 28 360-4 200-24 320 8" stroke="#C4A46A" strokeWidth="1.1" fill="none" opacity="0.75" />
-    </svg>
-  );
-}
-
-function Bloom({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 86 110" fill="none" aria-hidden="true">
-      <path d="M43 108c1-18 0-34 0-50" stroke="#C4A46A" strokeWidth="1.4" />
-      <path d="M43 76c-16 6-28 2-36-8" stroke="#C4A46A" strokeWidth="1.15" />
-      <ellipse cx="18" cy="66" rx="12" ry="5.5" transform="rotate(-42 18 66)" fill="#E9D6F1" stroke="#C4A46A" strokeWidth="1.1" />
-      <ellipse cx="43" cy="32" rx="10" ry="18" fill="#E9D6F1" stroke="#C4A46A" strokeWidth="1.25" />
-      <ellipse cx="43" cy="32" rx="10" ry="18" transform="rotate(72 43 32)" fill="#F4E9F7" stroke="#C4A46A" strokeWidth="1.25" />
-      <ellipse cx="43" cy="32" rx="10" ry="18" transform="rotate(144 43 32)" fill="#E9D6F1" stroke="#C4A46A" strokeWidth="1.25" />
-      <ellipse cx="43" cy="32" rx="10" ry="18" transform="rotate(216 43 32)" fill="#F4E9F7" stroke="#C4A46A" strokeWidth="1.25" />
-      <ellipse cx="43" cy="32" rx="10" ry="18" transform="rotate(288 43 32)" fill="#E9D6F1" stroke="#C4A46A" strokeWidth="1.25" />
-      <circle cx="43" cy="32" r="4.5" fill="#C4A46A" />
-    </svg>
-  );
-}
-
-function Florals() {
-  return (
-    <div className="florals" aria-hidden="true">
-      <Vine className="vine top" />
-      <Vine className="vine bottom" />
-      {["t0", "t1", "t2", "t3", "t4", "t5", "t6"].map((name) => (
-        <Bloom key={name} className={`bloom ${name}`} />
-      ))}
-      {["d0", "d1", "d2", "d3", "d4", "d5"].map((name) => (
-        <Bloom key={name} className={`bloom ${name}`} />
-      ))}
-      <Bloom className="bloom edge-l" />
-      <Bloom className="bloom edge-r" />
-      {STARS.map((name, index) => (
-        <i key={name} className={`star ${index % 3 === 1 ? "cut" : ""} ${name}`} />
-      ))}
+    <div className="sprigs" aria-hidden="true">
+      <svg className="sprig a" viewBox="0 0 120 180" fill="none">
+        <path d="M28 172c6-36 4-70 26-104" stroke="#C4A46A" strokeWidth="1" />
+        <path d="M42 138c-18 0-32-10-40-26" stroke="#C4A46A" strokeWidth="1" />
+        <path d="M48 108c16 1 28-8 36-20" stroke="#C4A46A" strokeWidth="1" />
+        <ellipse cx="62" cy="52" rx="6" ry="13" transform="rotate(-18 62 52)" stroke="#C4A46A" strokeWidth="1" />
+        <ellipse cx="76" cy="44" rx="5" ry="11" transform="rotate(28 76 44)" stroke="#C4A46A" strokeWidth="1" />
+        <ellipse cx="54" cy="40" rx="5" ry="10" transform="rotate(-58 54 40)" stroke="#C4A46A" strokeWidth="1" />
+      </svg>
+      <svg className="sprig b" viewBox="0 0 120 180" fill="none">
+        <path d="M92 172c-6-36-4-70-26-104" stroke="#C4A46A" strokeWidth="1" />
+        <path d="M78 138c18 0 32-10 40-26" stroke="#C4A46A" strokeWidth="1" />
+        <path d="M72 108c-16 1-28-8-36-20" stroke="#C4A46A" strokeWidth="1" />
+        <ellipse cx="58" cy="52" rx="6" ry="13" transform="rotate(18 58 52)" stroke="#C4A46A" strokeWidth="1" />
+        <ellipse cx="44" cy="44" rx="5" ry="11" transform="rotate(-28 44 44)" stroke="#C4A46A" strokeWidth="1" />
+        <ellipse cx="66" cy="40" rx="5" ry="10" transform="rotate(58 66 40)" stroke="#C4A46A" strokeWidth="1" />
+      </svg>
     </div>
   );
 }
@@ -79,7 +55,6 @@ function Florals() {
 export default function HomePage() {
   const [phase, setPhase] = useState<Phase>("room");
   const [beat, setBeat] = useState(0);
-  const [lineAt, setLineAt] = useState(0);
   const [ticketId, setTicketId] = useState<TicketId | "">("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -101,10 +76,6 @@ export default function HomePage() {
 
   function toggleLab(lab: string) {
     setLabs((currentLabs) => (currentLabs.includes(lab) ? currentLabs.filter((item) => item !== lab) : [...currentLabs, lab]));
-  }
-
-  function stepLine(dir: number) {
-    setLineAt((current) => (current + dir + LINES.length) % LINES.length);
   }
 
   function chooseTicket(id: TicketId) {
@@ -222,7 +193,7 @@ export default function HomePage() {
     <main className={`visit${phase === "room" && !success ? " is-room" : ""}`}>
       {success ? (
         <section className="invite">
-          <Florals />
+          <Sprig />
           <p className="kicker">{EVENT.name}</p>
           <div className="lockup">
             <div className="lockup-type">
@@ -248,40 +219,22 @@ export default function HomePage() {
 
       {!success && phase === "room" ? (
         <section className="room">
-          <Florals />
-          <div className="mast">
-            <p className="kicker">{EVENT.name}</p>
-            <p className="when">
-              {EVENT.when}, {EVENT.time}
-            </p>
-          </div>
-          <div className="lockup">
-            <div className="lockup-type">
-              <span className="next">The next</span>
-              <span className="script">her.</span>
-            </div>
-            <div className="cluster">
-              <i className="star float" style={{ width: 18, height: 18 }} />
-              <i className="star cut float" style={{ width: 12, height: 12 }} />
-              <Bloom className="bloom near" />
-              <i className="star float" style={{ width: 20, height: 20 }} />
-              <Bloom className="bloom near" />
-            </div>
-          </div>
-          <div className="wall">
-            <button className="line" type="button" onClick={() => stepLine(1)}>
-              <span className="mark">{LINES[lineAt]}</span>
-            </button>
+          <Sprig />
+          <p className="kicker">{EVENT.name}</p>
+          <h1 className="lockup">
+            <span className="next">The next</span> <span className="script">her.</span>
+          </h1>
+          <p className="when">
+            {EVENT.when}, {EVENT.time}
+          </p>
+          <div className="lines">
+            {LINES.map((line) => (
+              <p key={line}>{line}</p>
+            ))}
           </div>
           <div className="room-nav">
-            <button className="back" type="button" onClick={() => stepLine(-1)}>
-              Previous
-            </button>
-            <button className="back" type="button" onClick={() => stepLine(1)}>
-              Next
-            </button>
             <button className="go" type="button" onClick={() => go("beat", 0)}>
-              Continue <span aria-hidden="true">→</span>
+              Continue
             </button>
           </div>
         </section>
@@ -289,7 +242,7 @@ export default function HomePage() {
 
       {!success && phase === "beat" ? (
         <section className="beat">
-          <Florals />
+          <Sprig />
           <p className="kicker">Your details</p>
           <h1 className="proposal">{current.line}</h1>
           <form
@@ -399,7 +352,7 @@ export default function HomePage() {
                 Back
               </button>
               <button className="go wide" type="submit">
-                Continue <span aria-hidden="true">→</span>
+                Continue
               </button>
             </div>
           </form>
@@ -408,7 +361,7 @@ export default function HomePage() {
 
       {!success && phase === "seat" ? (
         <section className="seat">
-          <Florals />
+          <Sprig />
           <p className="kicker">Your seat</p>
           <h1 className="proposal">{LINES[4]}</h1>
           <div className="passes" role="radiogroup" aria-label="Tickets">
