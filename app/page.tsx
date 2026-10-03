@@ -247,9 +247,6 @@ export default function HomePage() {
                   </svg>
                   {EVENT.when}, {EVENT.time}
                 </p>
-                <p className="lede">
-                  The conference brings together women across industries to learn from women already making their mark. It also talks about the woman behind the work: femininity, friendships, self-care, and personal growth.
-                </p>
                 <div className="lines">
                   {LINES.map((line) => (
                     <button key={line} type="button" className={`phrase${held.includes(line) ? " on" : ""}`} onClick={() => hold(line)}>
