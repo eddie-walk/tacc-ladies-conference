@@ -234,6 +234,12 @@ export default function HomePage() {
                 <Floral className="floral tr" />
                 <Floral className="floral bl" />
                 <Floral className="floral br" />
+                <div className="glitter" aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                  <i />
+                </div>
                 <p className="kicker">{EVENT.name}</p>
                 <h1>
                   The next
@@ -248,8 +254,8 @@ export default function HomePage() {
                   {EVENT.when}, {EVENT.time}
                 </p>
                 <div className="lines">
-                  {LINES.map((line) => (
-                    <button key={line} type="button" className={`phrase${held.includes(line) ? " on" : ""}`} onClick={() => hold(line)}>
+                  {LINES.map((line, index) => (
+                    <button key={line} type="button" className={`phrase${held.includes(line) ? " on" : ""}${index === 0 ? " marked" : ""}`} onClick={() => hold(line)}>
                       <i className="touch" aria-hidden="true">
                         <Petal />
                       </i>
