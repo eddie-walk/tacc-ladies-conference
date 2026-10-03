@@ -17,37 +17,40 @@ const LINES = [
 ] as const;
 
 const HER_BEATS = 4;
+const MARKED = LINES[0];
 
-function Floral({ className }: { className: string }) {
+function Sprig({ className }: { className: string }) {
   return (
-    <svg className={className} viewBox="0 0 320 260" fill="none" aria-hidden="true">
-      <path d="M18 230c40-18 62-78 48-150" stroke="#C4A46A" strokeWidth="1.15" />
-      <path d="M36 214c28-10 48-48 36-96" stroke="#C4A46A" strokeWidth="1.05" />
-      <path d="M28 198c46 8 98 4 156-36" stroke="#C4A46A" strokeWidth="1.05" />
-      <path d="M52 176c34-6 58-34 48-78" stroke="#C4A46A" strokeWidth="1" />
-      <path d="M70 168c52 14 110 6 168-28" stroke="#C4A46A" strokeWidth="1" />
-      <path d="M24 150c22 16 36 46 28 78" stroke="#C4A46A" strokeWidth="1" />
-      <ellipse cx="78" cy="78" rx="16" ry="28" transform="rotate(-32 78 78)" stroke="#C4A46A" strokeWidth="1.1" />
-      <ellipse cx="112" cy="58" rx="13" ry="24" transform="rotate(18 112 58)" stroke="#C4A46A" strokeWidth="1.1" />
-      <ellipse cx="58" cy="108" rx="12" ry="22" transform="rotate(-70 58 108)" stroke="#C4A46A" strokeWidth="1.05" />
-      <ellipse cx="138" cy="92" rx="11" ry="20" transform="rotate(42 138 92)" stroke="#C4A46A" strokeWidth="1.05" />
-      <ellipse cx="168" cy="124" rx="10" ry="18" transform="rotate(-18 168 124)" stroke="#C4A46A" strokeWidth="1" />
-      <ellipse cx="96" cy="132" rx="9" ry="16" transform="rotate(64 96 132)" stroke="#C4A46A" strokeWidth="1" />
-      <circle cx="92" cy="96" r="6" stroke="#C4A46A" strokeWidth="1.05" />
-      <circle cx="126" cy="86" r="3.5" stroke="#C4A46A" strokeWidth="1" />
-      <path d="M150 70c18-16 28-18 48-14" stroke="#C4A46A" strokeWidth="1" />
-      <ellipse cx="206" cy="52" rx="8" ry="15" transform="rotate(24 206 52)" stroke="#C4A46A" strokeWidth="1" />
-      <path d="M188 148c22-8 40-8 62-2" stroke="#C4A46A" strokeWidth="1" />
-      <ellipse cx="248" cy="140" rx="8" ry="14" transform="rotate(-20 248 140)" stroke="#C4A46A" strokeWidth="1" />
+    <svg className={className} viewBox="0 0 180 180" fill="none" aria-hidden="true">
+      <path d="M4 18c22 10 40 28 58 52" stroke="#C4A46A" strokeWidth="1.45" />
+      <path d="M18 4c16 24 30 42 52 62" stroke="#C4A46A" strokeWidth="1.3" />
+      <ellipse cx="36" cy="48" rx="14" ry="6" transform="rotate(-32 36 48)" fill="#E9D6F1" stroke="#C4A46A" strokeWidth="1.15" />
+      <ellipse cx="78" cy="74" rx="13" ry="28" fill="#E9D6F1" stroke="#C4A46A" strokeWidth="1.3" />
+      <ellipse cx="78" cy="74" rx="13" ry="28" transform="rotate(60 78 74)" fill="#F3E6F6" stroke="#C4A46A" strokeWidth="1.3" />
+      <ellipse cx="78" cy="74" rx="13" ry="28" transform="rotate(120 78 74)" fill="#E9D6F1" stroke="#C4A46A" strokeWidth="1.3" />
+      <circle cx="78" cy="74" r="5.5" fill="#C4A46A" />
+      <ellipse cx="118" cy="52" rx="8" ry="14" transform="rotate(26 118 52)" fill="#E9D6F1" stroke="#C4A46A" strokeWidth="1.1" />
+      <path d="M96 58c12-6 20-8 32-4" stroke="#C4A46A" strokeWidth="1.1" />
     </svg>
   );
 }
 
-function Petal() {
+function Edge() {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <ellipse cx="12" cy="13" rx="5.2" ry="8" transform="rotate(-28 12 13)" fill="currentColor" />
-    </svg>
+    <div className="edge" aria-hidden="true">
+      <Sprig className="sprig a" />
+      <Sprig className="sprig b" />
+      <Sprig className="sprig c" />
+      <Sprig className="sprig d" />
+      <i className="glint g1" />
+      <i className="glint cut g2" />
+      <i className="glint g3" />
+      <i className="glint cut g4" />
+      <i className="glint g5" />
+      <i className="glint cut g6" />
+      <i className="glint g7" />
+      <i className="glint cut g8" />
+    </div>
   );
 }
 
@@ -72,16 +75,13 @@ export default function HomePage() {
   const [success, setSuccess] = useState<Success | null>(null);
 
   const ticket = useMemo(() => TICKETS.find((item) => item.id === ticketId), [ticketId]);
-  const phaseIndex = phase === "story" ? 0 : phase === "her" ? 1 : 2;
-  const fill = phase === "story" ? 0.08 + (held.length / LINES.length) * 0.36 : phase === "her" ? 0.5 + (beat / (HER_BEATS - 1)) * 0.5 : 1;
 
   function toggleLab(lab: string) {
     setLabs((current) => (current.includes(lab) ? current.filter((item) => item !== lab) : [...current, lab]));
   }
 
   function hold(line: string) {
-    setError("");
-    setHeld((current) => (current.includes(line) ? current : [...current, line]));
+    setHeld((current) => (current.includes(line) ? current.filter((item) => item !== line) : [...current, line]));
   }
 
   function chooseTicket(id: TicketId) {
@@ -117,10 +117,6 @@ export default function HomePage() {
       if (!(HEARD_OPTIONS as readonly string[]).includes(heard)) return "Tell us how you heard about the conference.";
     }
     return "";
-  }
-
-  function continueStory() {
-    go("her", 0);
   }
 
   function continueHer() {
@@ -201,92 +197,104 @@ export default function HomePage() {
     }
   }
 
-  const steps = [
-    { id: "story", label: "The conference" },
-    { id: "her", label: "Your details" },
-    { id: "seat", label: "Your seat" },
-  ] as const;
+  const detailFill = phase === "her" ? ((beat + 1) / HER_BEATS) * 100 : phase === "seat" ? 100 : 0;
 
   return (
-    <main className={`public${success ? " is-done" : ""}`}>
-      <div className="wrap">
-        {!success ? (
-          <div className="steps" aria-label="Registration">
-            <span className="step-line" aria-hidden="true">
-              <i style={{ transform: `scaleX(${fill})` }} />
-            </span>
-            {steps.map((step, index) => (
-              <span key={step.id} className={`step${index === phaseIndex ? " now" : ""}${index < phaseIndex ? " done" : ""}`}>
-                <i className="bloom">
-                  <Petal />
-                </i>
-                <span>{step.label}</span>
-              </span>
-            ))}
+    <main className={`hall${phase === "story" && !success ? " is-opening" : ""}`}>
+      <Edge />
+      {success ? (
+        <section className="scene scene-invite">
+          <div className="invite-body">
+            <p className="kicker">{EVENT.name}</p>
+            <p className="theme">
+              <span className="next">The next</span>
+              <span className="mark-lilac">her.</span>
+            </p>
+            <h1 className="guest">{name.trim()}</h1>
+            <p className="when">
+              {EVENT.when}, {EVENT.time}
+            </p>
+            <p className="meta">
+              {ticket ? ticket.name : "Seat"}
+              {otherNames.some((item) => item.trim()) ? ` · ${otherNames.filter((item) => item.trim()).join(" · ")}` : ""}
+            </p>
+            <hr className="rule" />
+            <div className="ref-label">Reference</div>
+            <p className="ref">{success.reference}</p>
+            <div className="pill">Payment pending</div>
+            <p className="held">Your seat is reserved. We&apos;ll email your Paystack link when payment opens.</p>
+            <p className="whisper">Invest in her. Inspire her. Empower her legacy.</p>
           </div>
-        ) : null}
+        </section>
+      ) : (
+        <>
+          <div className="rail" aria-hidden="true">
+            <span className={phase === "story" ? "on" : ""}>Conference</span>
+            <b>
+              <i style={{ width: phase === "story" ? "8%" : "100%" }} />
+            </b>
+            <span className={phase === "her" ? "on" : ""}>Details</span>
+            <b>
+              <i style={{ width: `${detailFill}%` }} />
+            </b>
+            <span className={phase === "seat" ? "on" : ""}>Seat</span>
+          </div>
 
-        {!success ? (
-          <div className="stage">
-            {phase === "story" ? (
-              <section className="card story" key="story">
-                <Floral className="floral tl" />
-                <Floral className="floral tr" />
-                <Floral className="floral bl" />
-                <Floral className="floral br" />
-                <div className="glitter" aria-hidden="true">
-                  <i />
-                  <i />
-                  <i />
-                  <i />
-                  <i />
-                  <i />
-                </div>
+          {phase === "story" ? (
+            <section className="scene scene-open">
+              <div className="copy">
                 <p className="kicker">{EVENT.name}</p>
                 <h1>
-                  The next
-                  <br />
-                  <em>her.</em>
+                  <span className="next">The next</span>
+                  <span className="mark-lilac">her.</span>
                 </h1>
                 <p className="when">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                    <rect x="2" y="3" width="12" height="11" rx="2" stroke="#4E2D5A" strokeWidth="1.2" />
-                    <path d="M2 6.5h12M5 2v3M11 2v3" stroke="#4E2D5A" strokeWidth="1.2" strokeLinecap="round" />
-                  </svg>
                   {EVENT.when}, {EVENT.time}
                 </p>
-                <div className="lines">
-                  {LINES.map((line, index) => (
-                    <button key={line} type="button" className={`phrase${held.includes(line) ? " on" : ""}${index === 0 ? " marked" : ""}`} onClick={() => hold(line)}>
-                      <i className="touch" aria-hidden="true">
-                        <Petal />
-                      </i>
-                      <span>{line}</span>
-                    </button>
-                  ))}
-                </div>
+                <p className="sense">
+                  Women across industries learning from women already making their mark, and the woman behind the work: femininity, friendships, self-care, personal growth.
+                </p>
                 <div className="nav">
-                  <button className="btn" type="button" onClick={continueStory}>
+                  <button className="forward" type="button" onClick={() => go("her", 0)}>
                     Continue <span aria-hidden="true">→</span>
                   </button>
                 </div>
-              </section>
-            ) : null}
+              </div>
+              <div className="lines">
+                {LINES.map((line) => (
+                  <button
+                    key={line}
+                    type="button"
+                    className={`line${held.includes(line) ? " on" : ""}`}
+                    aria-pressed={held.includes(line)}
+                    onClick={() => hold(line)}
+                  >
+                    {line === MARKED ? <span className="mark-gold">{line}</span> : line}
+                  </button>
+                ))}
+              </div>
+            </section>
+          ) : null}
 
-            {phase === "her" ? (
-              <section className="card her" key={`her-${beat}`}>
-                <Floral className="floral tl" />
-                <Floral className="floral tr" />
-                <Floral className="floral bl" />
-                <Floral className="floral br" />
+          {phase === "her" ? (
+            <section className="scene scene-beat">
+              <div className="copy">
                 <p className="kicker">Your details</p>
-                <p className="echo">{LINES[beat]}</p>
-                <div className={`error${error ? " show" : ""}`} role="alert">
-                  {error}
-                </div>
-
+                <h2>{LINES[beat]}</h2>
+                <p className="idx">
+                  0{beat + 1}
+                  <span aria-hidden="true"> / 04</span>
+                </p>
+              </div>
+              <form
+                className="panel"
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  continueHer();
+                }}
+              >
                 {beat === 0 ? (
-                  <div className="measure">
+                  <>
                     <label className="field">
                       Full name
                       <input value={name} onChange={(event) => setName(event.target.value)} autoComplete="name" type="text" placeholder="Your full name" />
@@ -299,16 +307,16 @@ export default function HomePage() {
                       Phone number
                       <input value={phone} onChange={(event) => setPhone(event.target.value)} autoComplete="tel" type="tel" placeholder="024 000 0000" inputMode="tel" />
                     </label>
-                  </div>
+                  </>
                 ) : null}
 
                 {beat === 1 ? (
-                  <div className="measure">
+                  <>
                     <div className="field">
                       Age group
-                      <div className="chips">
+                      <div className="choices">
                         {AGE_GROUPS.map((group) => (
-                          <button key={group} type="button" className={`chip${ageGroup === group ? " on" : ""}`} onClick={() => setAgeGroup(group)}>
+                          <button key={group} type="button" className={`choice${ageGroup === group ? " on" : ""}`} onClick={() => setAgeGroup(group)}>
                             {group}
                           </button>
                         ))}
@@ -316,24 +324,24 @@ export default function HomePage() {
                     </div>
                     <div className="field">
                       Industry
-                      <div className="chips">
+                      <div className="choices">
                         {INDUSTRIES.map((item) => (
-                          <button key={item} type="button" className={`chip${industry === item ? " on" : ""}`} onClick={() => setIndustry(item)}>
+                          <button key={item} type="button" className={`choice${industry === item ? " on" : ""}`} onClick={() => setIndustry(item)}>
                             {item}
                           </button>
                         ))}
                       </div>
                     </div>
-                  </div>
+                  </>
                 ) : null}
 
                 {beat === 2 ? (
-                  <div className="measure">
+                  <>
                     <div className="field">
                       Member of TACC
-                      <div className="chips">
+                      <div className="choices">
                         {(["Yes", "No"] as const).map((value) => (
-                          <button key={value} type="button" className={`chip${member === value ? " on" : ""}`} onClick={() => setMember(value)}>
+                          <button key={value} type="button" className={`choice${member === value ? " on" : ""}`} onClick={() => setMember(value)}>
                             {value}
                           </button>
                         ))}
@@ -347,143 +355,109 @@ export default function HomePage() {
                     ) : null}
                     <div className="field">
                       How did you hear about us?
-                      <div className="chips">
+                      <div className="choices">
                         {HEARD_OPTIONS.map((value) => (
-                          <button key={value} type="button" className={`chip${heard === value ? " on" : ""}`} onClick={() => setHeard(value)}>
+                          <button key={value} type="button" className={`choice${heard === value ? " on" : ""}`} onClick={() => setHeard(value)}>
                             {value}
                           </button>
                         ))}
                       </div>
                     </div>
-                  </div>
+                  </>
                 ) : null}
 
                 {beat === 3 ? (
-                  <div className="measure">
+                  <>
                     <label className="field">
                       Where you reside <span className="opt">optional</span>
                       <input value={residence} onChange={(event) => setResidence(event.target.value)} type="text" placeholder="City or area" />
                     </label>
                     <div className="field">
                       Growth Lab <span className="opt">optional</span>
-                      <div className="chips">
+                      <div className="choices">
                         {GROWTH_LAB.map((value) => (
-                          <button key={value} type="button" className={`chip${labs.includes(value) ? " on" : ""}`} onClick={() => toggleLab(value)}>
+                          <button key={value} type="button" className={`choice${labs.includes(value) ? " on" : ""}`} onClick={() => toggleLab(value)}>
                             {value}
                           </button>
                         ))}
                       </div>
                     </div>
-                  </div>
+                  </>
                 ) : null}
 
-                <div className="nav">
-                  <button className="btn ghost" type="button" onClick={back}>
-                    Back
-                  </button>
-                  <button className="btn" type="button" onClick={continueHer}>
-                    Continue <span aria-hidden="true">→</span>
-                  </button>
-                </div>
-              </section>
-            ) : null}
-
-            {phase === "seat" ? (
-              <section className="card seats" key="seat">
-                <Floral className="floral tl" />
-                <Floral className="floral tr" />
-                <Floral className="floral bl" />
-                <Floral className="floral br" />
-                <p className="kicker">Your seat</p>
-                <p className="echo">{LINES[4]}</p>
-                <h2>Take your seat</h2>
-                <p className="quiet">Take a seat, or bring her circle.</p>
-                <div className="tickets" role="radiogroup" aria-label="Tickets">
-                  {TICKETS.map((item) => (
-                    <button
-                      key={item.id}
-                      type="button"
-                      className={`ticket${item.id === ticketId ? " selected" : ""}`}
-                      role="radio"
-                      aria-checked={item.id === ticketId}
-                      onClick={() => chooseTicket(item.id)}
-                    >
-                      <span className="marks" aria-hidden="true">
-                        {Array.from({ length: item.seats }, (_, index) => (
-                          <i key={index} />
-                        ))}
-                      </span>
-                      <span className="name">{item.name}</span>
-                      <span className="price">GHS {item.priceGhs}</span>
-                      {item.note ? <span className="note">{item.note}</span> : <span className="note">&nbsp;</span>}
-                    </button>
-                  ))}
-                </div>
-                {ticket && ticket.seats > 1 ? (
-                  <div className="circle">
-                    <p>The other ladies</p>
-                    {Array.from({ length: ticket.seats - 1 }, (_, index) => (
-                      <label className="field" key={index}>
-                        Her name
-                        <input
-                          type="text"
-                          placeholder="Her full name"
-                          value={otherNames[index] ?? ""}
-                          onChange={(event) =>
-                            setOtherNames((current) => {
-                              const next = Array.from({ length: ticket.seats - 1 }, (_, item) => current[item] ?? "");
-                              next[index] = event.target.value;
-                              return next;
-                            })
-                          }
-                        />
-                      </label>
-                    ))}
-                  </div>
-                ) : null}
-                <div className={`error${error ? " show" : ""}`} role="alert">
+                <div className={`alert${error ? " show" : ""}`} role="alert">
                   {error}
                 </div>
                 <div className="nav">
-                  <button className="btn ghost" type="button" onClick={back}>
+                  <button className="back" type="button" onClick={back}>
                     Back
                   </button>
-                  <button className="btn" type="button" onClick={submit} disabled={busy}>
-                    {busy ? "Reserving your seat…" : "Complete registration"} {!busy ? <span aria-hidden="true">→</span> : null}
+                  <button className="forward block" type="submit">
+                    Continue <span aria-hidden="true">→</span>
                   </button>
                 </div>
-                <p className="fine">Payment opens soon. We&apos;ll send your Paystack link when it&apos;s ready.</p>
-              </section>
-            ) : null}
-          </div>
-        ) : (
-          <section className="card invite-card">
-            <Floral className="floral tl" />
-            <Floral className="floral tr" />
-            <Floral className="floral bl" />
-            <Floral className="floral br" />
-            <p className="kicker">{EVENT.name}</p>
-            <h2>
-              The next
-              <br />
-              <em>her.</em>
-            </h2>
-            <p className="when">
-              {EVENT.when}, {EVENT.time}
-            </p>
-            <article className="seat-card">
-              <p className="seat-name">{name}</p>
-              {ticket ? <p className="seat-kind">{ticket.name}</p> : null}
-              {otherNames.some((item) => item.trim()) ? <p className="with">{otherNames.filter((item) => item.trim()).join(" · ")}</p> : null}
-              <div className="lbl">Reference</div>
-              <strong>{success.reference}</strong>
-              <div className="status-pill">Payment pending</div>
-              <p>Your seat is reserved. We&apos;ll email your Paystack link when payment opens. Screenshot this reference.</p>
-            </article>
-            <p className="whisper">Invest in her. Inspire her. Empower her legacy.</p>
-          </section>
-        )}
-      </div>
+              </form>
+            </section>
+          ) : null}
+
+          {phase === "seat" ? (
+            <section className="scene scene-seat">
+              <p className="kicker">Your seat</p>
+              <h2>{LINES[4]}</h2>
+              <div className="passes" role="radiogroup" aria-label="Tickets">
+                {TICKETS.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    className={`pass${item.id === ticketId ? " on" : ""}`}
+                    role="radio"
+                    aria-checked={item.id === ticketId}
+                    onClick={() => chooseTicket(item.id)}
+                  >
+                    <span className="who">{item.name}</span>
+                    <span className="price">GHS {item.priceGhs}</span>
+                    <span className="save">{item.note}</span>
+                  </button>
+                ))}
+              </div>
+              {ticket && ticket.seats > 1 ? (
+                <div className="circle">
+                  <p className="span">The other ladies</p>
+                  {Array.from({ length: ticket.seats - 1 }, (_, index) => (
+                    <label className="field" key={index}>
+                      Her name
+                      <input
+                        type="text"
+                        placeholder="Her full name"
+                        value={otherNames[index] ?? ""}
+                        onChange={(event) =>
+                          setOtherNames((current) => {
+                            const next = Array.from({ length: ticket.seats - 1 }, (_, item) => current[item] ?? "");
+                            next[index] = event.target.value;
+                            return next;
+                          })
+                        }
+                      />
+                    </label>
+                  ))}
+                </div>
+              ) : null}
+              <div className={`alert${error ? " show" : ""}`} role="alert">
+                {error}
+              </div>
+              <div className="nav">
+                <button className="back" type="button" onClick={back}>
+                  Back
+                </button>
+                <button className="forward" type="button" onClick={submit} disabled={busy} aria-busy={busy}>
+                  Complete registration
+                </button>
+              </div>
+              <p className="fine">Payment opens soon. We&apos;ll send your Paystack link when it&apos;s ready.</p>
+            </section>
+          ) : null}
+        </>
+      )}
     </main>
   );
 }
