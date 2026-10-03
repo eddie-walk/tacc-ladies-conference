@@ -29,7 +29,6 @@ const BEATS: { id: BeatId; line: (typeof LINES)[number] }[] = [
   { id: "lab", line: LINES[4] },
 ];
 
-const MARKED = LINES[0];
 const STARS = ["s0", "s1", "s2", "s3", "s4", "s5", "s6", "s7", "s8", "s9", "s10", "s11", "s12", "s13", "s14", "s15", "s16"] as const;
 
 function Vine({ className }: { className: string }) {
@@ -80,7 +79,7 @@ function Florals() {
 export default function HomePage() {
   const [phase, setPhase] = useState<Phase>("room");
   const [beat, setBeat] = useState(0);
-  const [held, setHeld] = useState<string[]>([]);
+  const [lineAt, setLineAt] = useState(0);
   const [ticketId, setTicketId] = useState<TicketId | "">("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -104,8 +103,8 @@ export default function HomePage() {
     setLabs((currentLabs) => (currentLabs.includes(lab) ? currentLabs.filter((item) => item !== lab) : [...currentLabs, lab]));
   }
 
-  function hold(line: string) {
-    setHeld((currentLines) => (currentLines.includes(line) ? currentLines.filter((item) => item !== line) : [...currentLines, line]));
+  function stepLine(dir: number) {
+    setLineAt((current) => (current + dir + LINES.length) % LINES.length);
   }
 
   function chooseTicket(id: TicketId) {
@@ -270,13 +269,17 @@ export default function HomePage() {
             </div>
           </div>
           <div className="wall">
-            {LINES.map((line) => (
-              <button key={line} type="button" className={`line${held.includes(line) ? " on" : ""}`} aria-pressed={held.includes(line)} onClick={() => hold(line)}>
-                {line === MARKED ? <span className="mark">{line}</span> : line}
-              </button>
-            ))}
+            <button className="line" type="button" onClick={() => stepLine(1)}>
+              <span className="mark">{LINES[lineAt]}</span>
+            </button>
           </div>
           <div className="room-nav">
+            <button className="back" type="button" onClick={() => stepLine(-1)}>
+              Previous
+            </button>
+            <button className="back" type="button" onClick={() => stepLine(1)}>
+              Next
+            </button>
             <button className="go" type="button" onClick={() => go("beat", 0)}>
               Continue <span aria-hidden="true">→</span>
             </button>
