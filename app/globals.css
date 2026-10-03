@@ -90,13 +90,15 @@ button:focus-visible, input:focus-visible, select:focus-visible {
 .public .step.now span { color: var(--plum); }
 .public .card {
   background:
-    linear-gradient(180deg, rgba(244, 233, 248, 0.45), rgba(255, 252, 248, 0.15) 38%),
+    radial-gradient(640px 320px at 0% 0%, rgba(233, 214, 241, 0.72), transparent 68%),
+    radial-gradient(640px 340px at 100% 100%, rgba(233, 214, 241, 0.55), transparent 70%),
+    linear-gradient(180deg, rgba(244, 233, 248, 0.5), rgba(255, 252, 248, 0.2) 46%),
     var(--card);
   border-radius: 28px;
   box-shadow: var(--shadow);
   position: relative;
   overflow: hidden;
-  padding: 64px 22px 32px;
+  padding: 72px 22px 48px;
   text-align: center;
   animation: rise 0.45s ease;
 }
@@ -104,9 +106,11 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: none; }
 }
-.public .floral { position: absolute; pointer-events: none; width: 180px; height: auto; }
-.public .floral.tl { top: -26px; left: -30px; }
-.public .floral.tr { top: -26px; right: -30px; transform: scaleX(-1); }
+.public .floral { position: absolute; pointer-events: none; width: min(78vw, 340px); height: auto; }
+.public .floral.tl { top: -18px; left: -28px; }
+.public .floral.tr { top: -18px; right: -28px; transform: scaleX(-1); }
+.public .floral.bl { bottom: -36px; left: -24px; transform: scaleY(-1); }
+.public .floral.br { bottom: -36px; right: -24px; transform: scale(-1); }
 .public .kicker {
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -161,23 +165,53 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   width: 100%;
   border: 0;
   cursor: pointer;
-  background: rgba(255, 255, 255, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: transparent;
   color: var(--plum);
   border-radius: 22px;
-  padding: 22px 18px;
+  padding: 16px 12px;
   font-size: clamp(26px, 4vw, 40px);
   line-height: 1.15;
   font-weight: 500;
-  box-shadow: inset 0 0 0 1px var(--line);
   text-align: center;
+  transition: color 0.35s ease;
 }
+.public .phrase .touch {
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  color: transparent;
+  transform: scale(0.4);
+  opacity: 0;
+  transition: transform 0.35s ease, opacity 0.35s ease, color 0.35s ease;
+}
+.public .phrase .touch svg { width: 16px; height: 16px; display: block; }
 .public .phrase.on {
-  background: var(--lilac);
-  box-shadow: inset 0 0 0 1.5px var(--gold);
+  font-style: italic;
+  color: var(--gold-deep);
+  background: transparent;
+}
+.public .phrase.on .touch {
+  color: var(--gold);
+  opacity: 1;
+  transform: scale(1);
 }
 .public .phrase:nth-child(4) { font-size: clamp(22px, 3.2vw, 32px); letter-spacing: 0.06em; }
-.public .phrase:nth-child(5) { font-style: italic; color: var(--gold-deep); }
-.public .phrase:nth-child(5).on { color: var(--plum); }
+.public .echo {
+  margin: 0 auto 8px;
+  max-width: 16em;
+  font-family: var(--font-serif), "Cormorant Garamond", serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.15;
+  color: var(--plum);
+}
 .public .measure {
   display: grid;
   gap: 14px;
@@ -303,15 +337,21 @@ button:focus-visible, input:focus-visible, select:focus-visible {
   box-shadow: inset 0 0 0 1.5px var(--gold);
   background: linear-gradient(180deg, #fff, #fbf7f1);
 }
-.public .marks { display: flex; gap: 5px; min-height: 14px; }
+.public .marks { display: flex; gap: 6px; min-height: 18px; align-items: flex-end; }
 .public .marks i {
-  width: 8px;
-  height: 12px;
-  border-radius: 8px 8px 8px 2px;
-  background: var(--lilac);
-  transform: rotate(-18deg);
+  width: 12px;
+  height: 18px;
+  border-radius: 12px 12px 12px 3px;
+  background: transparent;
+  box-shadow: inset 0 0 0 1.25px var(--gold);
+  transform: rotate(-16deg);
+  transition: background 0.25s ease, transform 0.25s ease;
 }
-.public .ticket.selected .marks i { background: var(--gold); }
+.public .ticket.selected .marks i {
+  background: var(--gold);
+  box-shadow: none;
+  transform: rotate(-16deg) scale(1.06);
+}
 .public .ticket .name { font-weight: 500; font-size: 16px; color: var(--plum); }
 .public .ticket .price {
   font-family: var(--font-serif), "Cormorant Garamond", serif;
@@ -409,10 +449,12 @@ button:focus-visible, input:focus-visible, select:focus-visible {
     padding: 56px 0 88px;
   }
   .public .steps { margin-bottom: 28px; }
-  .public .card { padding: 88px 72px 56px; }
-  .public .floral { width: 240px; }
-  .public .floral.tl { top: -32px; left: -18px; }
-  .public .floral.tr { top: -32px; right: -18px; }
+  .public .card { padding: 104px 88px 80px; }
+  .public .floral { width: 460px; }
+  .public .floral.tl { top: -28px; left: -36px; }
+  .public .floral.tr { top: -28px; right: -36px; }
+  .public .floral.bl { bottom: -48px; left: -30px; }
+  .public .floral.br { bottom: -48px; right: -30px; }
   .public h1 { font-size: 112px; }
   .public .lede { margin-top: 28px; font-size: 18px; }
   .public .lines { gap: 14px; margin-top: 40px; }

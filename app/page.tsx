@@ -20,13 +20,25 @@ const HER_BEATS = 4;
 
 function Floral({ className }: { className: string }) {
   return (
-    <svg className={className} width="220" height="176" viewBox="0 0 150 120" fill="none" aria-hidden="true">
-      <path d="M10 90c30-10 40-40 28-68" stroke="#C4A46A" strokeWidth="1.2" />
-      <path d="M30 78c18-6 28-24 22-40" stroke="#C4A46A" strokeWidth="1.1" />
-      <path d="M18 70c20 8 48 6 70-12" stroke="#C4A46A" strokeWidth="1.1" />
-      <ellipse cx="42" cy="28" rx="10" ry="16" transform="rotate(-30 42 28)" stroke="#C4A46A" strokeWidth="1.1" />
-      <ellipse cx="62" cy="22" rx="8" ry="14" transform="rotate(20 62 22)" stroke="#C4A46A" strokeWidth="1.1" />
-      <circle cx="50" cy="36" r="4" stroke="#C4A46A" strokeWidth="1.1" />
+    <svg className={className} viewBox="0 0 320 260" fill="none" aria-hidden="true">
+      <path d="M18 230c40-18 62-78 48-150" stroke="#C4A46A" strokeWidth="1.15" />
+      <path d="M36 214c28-10 48-48 36-96" stroke="#C4A46A" strokeWidth="1.05" />
+      <path d="M28 198c46 8 98 4 156-36" stroke="#C4A46A" strokeWidth="1.05" />
+      <path d="M52 176c34-6 58-34 48-78" stroke="#C4A46A" strokeWidth="1" />
+      <path d="M70 168c52 14 110 6 168-28" stroke="#C4A46A" strokeWidth="1" />
+      <path d="M24 150c22 16 36 46 28 78" stroke="#C4A46A" strokeWidth="1" />
+      <ellipse cx="78" cy="78" rx="16" ry="28" transform="rotate(-32 78 78)" stroke="#C4A46A" strokeWidth="1.1" />
+      <ellipse cx="112" cy="58" rx="13" ry="24" transform="rotate(18 112 58)" stroke="#C4A46A" strokeWidth="1.1" />
+      <ellipse cx="58" cy="108" rx="12" ry="22" transform="rotate(-70 58 108)" stroke="#C4A46A" strokeWidth="1.05" />
+      <ellipse cx="138" cy="92" rx="11" ry="20" transform="rotate(42 138 92)" stroke="#C4A46A" strokeWidth="1.05" />
+      <ellipse cx="168" cy="124" rx="10" ry="18" transform="rotate(-18 168 124)" stroke="#C4A46A" strokeWidth="1" />
+      <ellipse cx="96" cy="132" rx="9" ry="16" transform="rotate(64 96 132)" stroke="#C4A46A" strokeWidth="1" />
+      <circle cx="92" cy="96" r="6" stroke="#C4A46A" strokeWidth="1.05" />
+      <circle cx="126" cy="86" r="3.5" stroke="#C4A46A" strokeWidth="1" />
+      <path d="M150 70c18-16 28-18 48-14" stroke="#C4A46A" strokeWidth="1" />
+      <ellipse cx="206" cy="52" rx="8" ry="15" transform="rotate(24 206 52)" stroke="#C4A46A" strokeWidth="1" />
+      <path d="M188 148c22-8 40-8 62-2" stroke="#C4A46A" strokeWidth="1" />
+      <ellipse cx="248" cy="140" rx="8" ry="14" transform="rotate(-20 248 140)" stroke="#C4A46A" strokeWidth="1" />
     </svg>
   );
 }
@@ -60,9 +72,8 @@ export default function HomePage() {
   const [success, setSuccess] = useState<Success | null>(null);
 
   const ticket = useMemo(() => TICKETS.find((item) => item.id === ticketId), [ticketId]);
-  const storyReady = LINES.every((line) => held.includes(line));
   const phaseIndex = phase === "story" ? 0 : phase === "her" ? 1 : 2;
-  const fill = phase === "story" ? (held.length / LINES.length) * 0.5 : phase === "her" ? 0.5 + (beat / (HER_BEATS - 1)) * 0.5 : 1;
+  const fill = phase === "story" ? 0.08 + (held.length / LINES.length) * 0.36 : phase === "her" ? 0.5 + (beat / (HER_BEATS - 1)) * 0.5 : 1;
 
   function toggleLab(lab: string) {
     setLabs((current) => (current.includes(lab) ? current.filter((item) => item !== lab) : [...current, lab]));
@@ -109,10 +120,6 @@ export default function HomePage() {
   }
 
   function continueStory() {
-    if (!storyReady) {
-      setError("Tap each line.");
-      return;
-    }
     go("her", 0);
   }
 
@@ -225,6 +232,8 @@ export default function HomePage() {
               <section className="card story" key="story">
                 <Floral className="floral tl" />
                 <Floral className="floral tr" />
+                <Floral className="floral bl" />
+                <Floral className="floral br" />
                 <p className="kicker">{EVENT.name}</p>
                 <h1>
                   The next
@@ -244,12 +253,12 @@ export default function HomePage() {
                 <div className="lines">
                   {LINES.map((line) => (
                     <button key={line} type="button" className={`phrase${held.includes(line) ? " on" : ""}`} onClick={() => hold(line)}>
-                      {line}
+                      <i className="touch" aria-hidden="true">
+                        <Petal />
+                      </i>
+                      <span>{line}</span>
                     </button>
                   ))}
-                </div>
-                <div className={`error${error ? " show" : ""}`} role="alert">
-                  {error}
                 </div>
                 <div className="nav">
                   <button className="btn" type="button" onClick={continueStory}>
@@ -263,7 +272,10 @@ export default function HomePage() {
               <section className="card her" key={`her-${beat}`}>
                 <Floral className="floral tl" />
                 <Floral className="floral tr" />
+                <Floral className="floral bl" />
+                <Floral className="floral br" />
                 <p className="kicker">Your details</p>
+                <p className="echo">{LINES[beat]}</p>
                 <div className={`error${error ? " show" : ""}`} role="alert">
                   {error}
                 </div>
@@ -375,7 +387,10 @@ export default function HomePage() {
               <section className="card seats" key="seat">
                 <Floral className="floral tl" />
                 <Floral className="floral tr" />
+                <Floral className="floral bl" />
+                <Floral className="floral br" />
                 <p className="kicker">Your seat</p>
+                <p className="echo">{LINES[4]}</p>
                 <h2>Take your seat</h2>
                 <p className="quiet">Take a seat, or bring her circle.</p>
                 <div className="tickets" role="radiogroup" aria-label="Tickets">
@@ -440,6 +455,8 @@ export default function HomePage() {
           <section className="card invite-card">
             <Floral className="floral tl" />
             <Floral className="floral tr" />
+            <Floral className="floral bl" />
+            <Floral className="floral br" />
             <p className="kicker">{EVENT.name}</p>
             <h2>
               The next
