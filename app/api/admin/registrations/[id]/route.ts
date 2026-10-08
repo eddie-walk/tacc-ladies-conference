@@ -1,9 +1,23 @@
 import { adminGuard, noStoreJson } from "@/lib/auth";
-import { RegistrationError, updateRegistration } from "@/lib/registrations";
+import { RegistrationError, deleteRegistration, updateRegistration } from "@/lib/registrations";
 import { PAYMENT_STATUSES, type PaymentStatus, type RegistrationPatch } from "@/lib/types";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
+
+export async function DELETE(request: Request, context: { params: Promise<{ id: string }> }) {
+  const denied = adminGuard(request);
+  if (denied) return denied;
+  const { id } = await context.params;
+  try {
+    await deleteRegistration(id);
+    return noStoreJson({ ok: true, message: "Registration deleted successfully." });
+  } catch (error) {
+    if (error instanceof RegistrationError) return noStoreJson({ error: error.message }, error.status);
+    console.error("delete failed", error);
+    return noStoreJson({ error: "Could not delete the registration." }, 500);
+  }
+}
 
 export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
   const denied = adminGuard(request);

@@ -19,9 +19,10 @@ export function noStoreJson(data: unknown, status = 200): NextResponse {
 
 /** Returns a response when the caller is not allowed to continue. */
 export function adminGuard(request: Request): NextResponse | null {
-  const secret = process.env.ADMIN_SECRET;
+  const secret = process.env.ADMIN_SECRET?.trim();
   if (!secret) {
-    return noStoreJson({ error: "Admin is not configured." }, 503);
+    console.error("ADMIN_SECRET is not configured in environment variables.");
+    return noStoreJson({ error: "Unauthorized." }, 401);
   }
   const provided = request.headers.get("x-admin-secret") ?? "";
   if (!provided || !secretsMatch(provided, secret)) {

@@ -34,7 +34,7 @@ export function validateRegister(body: unknown): { ok: true; value: RegisterInpu
   const email = cleanText(raw.email, 120).toLowerCase();
   const phone = cleanText(raw.phone, 30);
   const ageGroup = cleanText(raw.ageGroup, 20);
-  const industry = cleanText(raw.industry, 40);
+  const industry = cleanText(raw.industry, 80);
   const residence = cleanText(raw.residence, 80);
   const memberRaw = cleanText(raw.taccMember, 3);
   const pfcc = cleanText(raw.pfcc, 80);
@@ -42,12 +42,13 @@ export function validateRegister(body: unknown): { ok: true; value: RegisterInpu
 
   if (name.length < 2) return { ok: false, error: "Add your full name." };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return { ok: false, error: "Add an email address so we can send your Paystack link." };
+    return { ok: false, error: "Add an email address so we can send your confirmation." };
   }
   const digits = phone.replace(/\D/g, "");
   if (digits.length < 9 || digits.length > 15) return { ok: false, error: "Add a phone number." };
   if (!AGE.has(ageGroup)) return { ok: false, error: "Choose your age group." };
-  if (!INDUSTRY.has(industry)) return { ok: false, error: "Choose your industry." };
+  const isKnownIndustry = INDUSTRY.has(industry) || industry.startsWith("Other:") || industry.startsWith("Other - ") || industry.startsWith("Other (");
+  if (!isKnownIndustry || industry.length < 2) return { ok: false, error: "Choose your industry." };
   if (memberRaw !== "Yes" && memberRaw !== "No") {
     return { ok: false, error: "Let us know if you’re a member of TACC." };
   }

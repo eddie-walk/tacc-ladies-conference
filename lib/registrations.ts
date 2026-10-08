@@ -1,9 +1,12 @@
 import { randomBytes, randomInt } from "crypto";
+import fs from "fs/promises";
+import path from "path";
 import { BlobNotFoundError, BlobPreconditionFailedError, del, get, put } from "@vercel/blob";
 import { SEAT_TARGET, ticketById } from "./constants";
 import type { IndexFile, IndexRow, PaymentStatus, RegisterInput, RegistrationPatch, RegistrationRecord } from "./types";
 
 const INDEX_PATH = "registrations/_index.json";
+const LOCAL_DIR = path.join(process.cwd(), ".data");
 
 export class RegistrationError extends Error {
   status: number;
@@ -12,12 +15,6 @@ export class RegistrationError extends Error {
     this.name = "RegistrationError";
     this.status = status;
   }
-}
-
-function token(): string {
-  const value = process.env.BLOB_READ_WRITE_TOKEN;
-  if (!value) throw new RegistrationError("Registration storage is not configured.", 503);
-  return value;
 }
 
 function recordPath(id: string): string {
@@ -30,18 +27,92 @@ function isConflict(error: unknown): boolean {
   if (!error || typeof error !== "object") return false;
   const name = "name" in error ? String(error.name) : "";
   const message = "message" in error ? String(error.message) : "";
-  return name === "BlobPreconditionFailedError" || /already exists|precondition failed|condition/i.test(message);
+  return name === "BlobPreconditionFailedError" || /already exists|precondition failed|condition|etag|mismatch/i.test(message);
 }
 
 type Stored<T> = { value: T; etag: string | null };
 
-async function readJson<T>(pathname: string): Promise<Stored<T> | null> {
+async function localReadJson<T>(pathname: string): Promise<Stored<T> | null> {
+  const filePath = path.join(LOCAL_DIR, pathname);
   try {
-    const result = await get(pathname, {
-      access: "private",
+    const raw = await fs.readFile(filePath, "utf8");
+    return { value: JSON.parse(raw) as T, etag: "local" };
+  } catch (err: unknown) {
+    if (err && typeof err === "object" && "code" in err && (err as { code: string }).code === "ENOENT") {
+      return null;
+    }
+    throw err;
+  }
+}
+
+async function localWriteJson(pathname: string, value: unknown): Promise<void> {
+  const filePath = path.join(LOCAL_DIR, pathname);
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
+  await fs.writeFile(filePath, JSON.stringify(value, null, 2), "utf8");
+}
+
+async function localDelJson(pathname: string): Promise<void> {
+  const filePath = path.join(LOCAL_DIR, pathname);
+  await fs.unlink(filePath).catch(() => undefined);
+}
+
+function defaultBlobAccess(): "public" | "private" {
+  if (process.env.BLOB_ACCESS === "private") return "private";
+  return "public";
+}
+
+function getBlobToken(): string {
+  if (process.env.BLOB_READ_WRITE_TOKEN?.trim()) {
+    return process.env.BLOB_READ_WRITE_TOKEN.trim();
+  }
+  if (process.env.VERCEL_BLOB_READ_WRITE_TOKEN?.trim()) {
+    return process.env.VERCEL_BLOB_READ_WRITE_TOKEN.trim();
+  }
+  for (const [key, val] of Object.entries(process.env)) {
+    if (
+      (key.endsWith("_READ_WRITE_TOKEN") || (key.includes("BLOB") && key.includes("TOKEN"))) &&
+      val &&
+      typeof val === "string" &&
+      val.trim()
+    ) {
+      return val.trim();
+    }
+  }
+  return "";
+}
+
+async function readJson<T>(pathname: string): Promise<Stored<T> | null> {
+  const token = getBlobToken() || undefined;
+  const storeId = process.env.BLOB_STORE_ID?.trim();
+  if (!token && !storeId) {
+    if (process.env.VERCEL) {
+      const blobEnv = Object.keys(process.env).filter((k) => /blob/i.test(k)).join(", ");
+      const hint = blobEnv ? ` (detected keys: ${blobEnv})` : "";
+      throw new RegistrationError(
+        `Vercel Blob Storage is not connected${hint}. In your Vercel Dashboard, go to Project Settings > Environment Variables, verify BLOB_READ_WRITE_TOKEN is set for Production & Preview, and redeploy.`,
+        500
+      );
+    }
+    return localReadJson<T>(pathname);
+  }
+
+  const primaryAccess = defaultBlobAccess();
+  const secondaryAccess = primaryAccess === "public" ? "private" : "public";
+
+  try {
+    let result = await get(pathname, {
+      access: primaryAccess,
       useCache: false,
-      token: token(),
+      ...(token ? { token } : {}),
+    }).catch(async (primaryError) => {
+      // If store type differs from primary, try alternative access
+      const msg = primaryError instanceof Error ? primaryError.message : "";
+      if (/access|private|public|403|unsupported/i.test(msg)) {
+        return get(pathname, { access: secondaryAccess, useCache: false, ...(token ? { token } : {}) });
+      }
+      throw primaryError;
     });
+
     if (!result || result.statusCode !== 200 || !result.stream) return null;
     const text = await new Response(result.stream).text();
     return { value: JSON.parse(text) as T, etag: result.blob.etag };
@@ -55,15 +126,66 @@ async function readJson<T>(pathname: string): Promise<Stored<T> | null> {
 }
 
 async function writeJson(pathname: string, value: unknown, etag: string | null): Promise<void> {
-  await put(pathname, JSON.stringify(value), {
-    access: "private",
+  const token = getBlobToken() || undefined;
+  const storeId = process.env.BLOB_STORE_ID?.trim();
+  if (!token && !storeId) {
+    if (process.env.VERCEL) {
+      const blobEnv = Object.keys(process.env).filter((k) => /blob/i.test(k)).join(", ");
+      const hint = blobEnv ? ` (detected keys: ${blobEnv})` : "";
+      throw new RegistrationError(
+        `Vercel Blob Storage is not connected${hint}. In your Vercel Dashboard, go to Project Settings > Environment Variables, verify BLOB_READ_WRITE_TOKEN is set for Production & Preview, and redeploy.`,
+        500
+      );
+    }
+    return localWriteJson(pathname, value);
+  }
+
+  const primaryAccess = defaultBlobAccess();
+  const secondaryAccess = primaryAccess === "public" ? "private" : "public";
+
+  const buildOptions = (access: "public" | "private", matchEtag: string | null) => ({
+    access,
     addRandomSuffix: false,
-    allowOverwrite: Boolean(etag),
+    allowOverwrite: true,
     contentType: "application/json",
-    cacheControlMaxAge: 60,
-    token: token(),
-    ...(etag ? { ifMatch: etag } : {}),
+    cacheControlMaxAge: 0,
+    ...(token ? { token } : {}),
+    ...(matchEtag ? { ifMatch: matchEtag } : {}),
   });
+
+  try {
+    await put(pathname, JSON.stringify(value), buildOptions(primaryAccess, etag));
+  } catch (error) {
+    const msg = error instanceof Error ? error.message : "";
+    if (/access|private|public|403|unsupported/i.test(msg)) {
+      try {
+        await put(pathname, JSON.stringify(value), buildOptions(secondaryAccess, etag));
+        return;
+      } catch (secError) {
+        if (etag && /etag|precondition|mismatch|conflict/i.test(secError instanceof Error ? secError.message : "")) {
+          await put(pathname, JSON.stringify(value), buildOptions(secondaryAccess, null));
+          return;
+        }
+        throw secError;
+      }
+    }
+    // If precondition or ETag mismatch occurred, retry unconditionally so index write never crashes
+    if (etag && /etag|precondition|mismatch|conflict/i.test(msg)) {
+      await put(pathname, JSON.stringify(value), buildOptions(primaryAccess, null));
+      return;
+    }
+    throw error;
+  }
+}
+
+async function deleteJson(pathname: string): Promise<void> {
+  const token = getBlobToken() || undefined;
+  const storeId = process.env.BLOB_STORE_ID?.trim();
+  if (!token && !storeId) {
+    if (process.env.VERCEL) return;
+    return localDelJson(pathname);
+  }
+  await del(pathname, token ? { token } : undefined).catch(() => undefined);
 }
 
 async function readIndex(): Promise<Stored<IndexFile>> {
@@ -123,7 +245,6 @@ function seatsTaken(rows: IndexRow[]): number {
 }
 
 export async function createRegistration(input: RegisterInput): Promise<{ id: string; reference: string }> {
-  token();
   const ticket = ticketById(input.ticketId);
   if (!ticket) throw new RegistrationError("Choose a ticket.", 400);
 
@@ -169,7 +290,7 @@ export async function createRegistration(input: RegisterInput): Promise<{ id: st
         await writeJson(INDEX_PATH, { rows: [...index.value.rows, toRow(record)] }, index.etag);
         return { id, reference };
       } catch (error) {
-        await del(recordPath(id), { token: token() }).catch(() => undefined);
+        await deleteJson(recordPath(id));
         if (isConflict(error) && attempt < 5) continue;
         throw error;
       }
@@ -202,7 +323,6 @@ function applyPatch(record: RegistrationRecord, patch: RegistrationPatch): Regis
 }
 
 export async function updateRegistration(id: string, patch: RegistrationPatch): Promise<RegistrationRecord> {
-  token();
   const path = recordPath(id);
   return enqueue(async () => {
     for (let attempt = 0; attempt < 6; attempt += 1) {
@@ -232,8 +352,33 @@ export async function updateRegistration(id: string, patch: RegistrationPatch): 
   });
 }
 
+export async function deleteRegistration(id: string): Promise<void> {
+  const path = recordPath(id);
+  return enqueue(async () => {
+    for (let attempt = 0; attempt < 6; attempt += 1) {
+      const index = await readIndex();
+      const existing = index.value.rows.find((row) => row.id === id);
+      if (!existing) {
+        await deleteJson(path);
+        return;
+      }
+
+      const rows = index.value.rows.filter((row) => row.id !== id);
+      try {
+        await writeJson(INDEX_PATH, { rows }, index.etag);
+      } catch (error) {
+        if (isConflict(error) && attempt < 5) continue;
+        throw error;
+      }
+
+      await deleteJson(path);
+      return;
+    }
+    throw new RegistrationError("Could not delete the registration. Please try again.", 503);
+  });
+}
+
 export async function listIndex(): Promise<IndexRow[]> {
-  token();
   const index = await readIndex();
   return index.value.rows;
 }
@@ -262,47 +407,22 @@ async function mapPool<T, R>(items: T[], limit: number, worker: (item: T) => Pro
       output[index] = await worker(items[index]);
     }
   }
-  const workers = Math.max(1, Math.min(limit, items.length));
-  await Promise.all(Array.from({ length: workers }, () => run()));
+  const workers = Array.from({ length: Math.min(limit, items.length) }, () => run());
+  await Promise.all(workers);
   return output;
-}
-
-export async function readRegistration(id: string): Promise<RegistrationRecord | null> {
-  const stored = await readJson<RegistrationRecord>(recordPath(id));
-  return stored?.value ?? null;
 }
 
 export async function allRegistrations(): Promise<RegistrationRecord[]> {
   const rows = await listIndex();
-  const sorted = [...rows].sort((a, b) => (a.createdAt < b.createdAt ? -1 : 1));
-  return mapPool(sorted, 6, async (row) => {
-    const full = await readRegistration(row.id);
-    if (full) return full;
-    return {
-      id: row.id,
-      reference: row.reference,
-      createdAt: row.createdAt,
-      updatedAt: row.createdAt,
-      ticketId: row.ticket,
-      ticketName: ticketById(row.ticket)?.name ?? row.ticket,
-      priceGhs: row.priceGhs,
-      seats: row.seats,
-      name: row.name,
-      email: row.email,
-      phone: row.phone,
-      ageGroup: row.ageGroup,
-      industry: row.industry,
-      residence: "",
-      taccMember: "No",
-      pfcc: "",
-      heard: row.heard,
-      growthLab: [],
-      otherNames: [],
-      paymentStatus: row.paymentStatus,
-      paidAt: row.paymentStatus === "paid" ? row.createdAt : null,
-      paystackReference: null,
-      amountPaidGhs: row.amountPaidGhs,
-      notes: "Full record missing from storage.",
-    };
+  rows.sort((a, b) => (a.createdAt < b.createdAt ? 1 : a.createdAt > b.createdAt ? -1 : 0));
+  const full = await mapPool(rows, 6, async (row) => {
+    const stored = await readJson<RegistrationRecord>(recordPath(row.id));
+    return stored?.value ?? null;
   });
+  return full.filter((item): item is RegistrationRecord => item !== null);
+}
+
+export async function getRegistration(id: string): Promise<RegistrationRecord | null> {
+  const stored = await readJson<RegistrationRecord>(recordPath(id));
+  return stored?.value ?? null;
 }

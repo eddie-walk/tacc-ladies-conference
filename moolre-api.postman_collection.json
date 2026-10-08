@@ -1,0 +1,3617 @@
+{
+  "info": {
+    "name": "Moolre API",
+    "description": "Generated from the Moolre docs endpoint catalogue. Import this collection first, then import and select either the live or sandbox environment. SMS and WhatsApp use separate VAS API key variables.",
+    "version": "2026.07.16.1",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "SMS",
+      "description": "Send SMS messages, manage Sender IDs, and retrieve SMS delivery or account status.",
+      "item": [
+        {
+          "name": "Send SMS",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-VASKEY",
+                "value": "{{smsVasKey}}",
+                "type": "text",
+                "description": "Your SMS API VAS key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "The Send SMS (POST) API allows you to send bulk or single SMS messages to recipients across any network. Note: This API requires X-API-VASKEY in the header for authentication.\n\nDocs route: https://docs.moolre.com/api/sms/send\n\nRequest notes:\n- `type`: ID of the sms sending function. Must be 1.\n- `senderid`: Your registered and approved Sender ID (max 11 chars).\n- `messages`: An array of message objects containing recipient, message, and optional ref.",
+            "url": {
+              "raw": "{{baseUrl}}/open/sms/send",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "sms",
+                "send"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 1,\n  \"senderid\": \"Moolre\",\n  \"messages\": [\n    {\n      \"recipient\": \"0241234567\",\n      \"message\": \"Hello from Moolre\",\n      \"ref\": \"ref-001\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/send",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "send"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"senderid\": \"Moolre\",\n  \"messages\": [\n    {\n      \"recipient\": \"0241234567\",\n      \"message\": \"Hello from Moolre\",\n      \"ref\": \"ref-001\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"SMS01\",\n  \"message\": \"Success\",\n  \"data\": null,\n  \"go\": null\n}"
+            },
+            {
+              "name": "400 - Unapproved Sender ID",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/send",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "send"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"senderid\": \"Moolre\",\n  \"messages\": [\n    {\n      \"recipient\": \"0241234567\",\n      \"message\": \"Hello from Moolre\",\n      \"ref\": \"ref-001\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unapproved Sender ID",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 0,\n  \"code\": \"ASMS07\",\n  \"message\": \"Sender ID is not approved, Please login on app.moolre.com and setup your Sender ID.\",\n  \"data\": \"senderid\",\n  \"go\": null\n}"
+            },
+            {
+              "name": "401 - Authentication Error",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/send",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "send"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"senderid\": \"Moolre\",\n  \"messages\": [\n    {\n      \"recipient\": \"0241234567\",\n      \"message\": \"Hello from Moolre\",\n      \"ref\": \"ref-001\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Authentication Error",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 0,\n  \"code\": \"AIN01\",\n  \"message\": \"Authentication Error\",\n  \"data\": null,\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Send SMS (GET)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-VASKEY",
+                "value": "{{smsVasKey}}",
+                "type": "text",
+                "description": "Your SMS API VAS key."
+              }
+            ],
+            "description": "The Send SMS (GET) API allows you to send SMS instantly using query parameters.\n\nDocs route: https://docs.moolre.com/api/sms/send-get\n\nRequest notes:\n- `type`: Must be 1.\n- `senderid`: Registered and approved Sender ID.\n- `recipient`: Recipient phone number.\n- `message`: Message content (max 160 characters).",
+            "url": {
+              "raw": "{{baseUrl}}/open/sms/send?type=1&senderid=Moolre&recipient=0241234567&message=",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "sms",
+                "send"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "1",
+                  "description": "Must be 1.",
+                  "disabled": false
+                },
+                {
+                  "key": "senderid",
+                  "value": "Moolre",
+                  "description": "Registered and approved Sender ID.",
+                  "disabled": false
+                },
+                {
+                  "key": "recipient",
+                  "value": "0241234567",
+                  "description": "Recipient phone number.",
+                  "disabled": false
+                },
+                {
+                  "key": "message",
+                  "value": "",
+                  "description": "Message content (max 160 characters).",
+                  "disabled": false
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/send?type=1&senderid=Moolre&recipient=0241234567&message=",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "send"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "1",
+                      "description": "Must be 1.",
+                      "disabled": false
+                    },
+                    {
+                      "key": "senderid",
+                      "value": "Moolre",
+                      "description": "Registered and approved Sender ID.",
+                      "disabled": false
+                    },
+                    {
+                      "key": "recipient",
+                      "value": "0241234567",
+                      "description": "Recipient phone number.",
+                      "disabled": false
+                    },
+                    {
+                      "key": "message",
+                      "value": "",
+                      "description": "Message content (max 160 characters).",
+                      "disabled": false
+                    }
+                  ]
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"SMS01\",\n  \"message\": \"Success\",\n  \"data\": null,\n  \"go\": null\n}"
+            },
+            {
+              "name": "401 - Authentication Error",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/send?type=1&senderid=Moolre&recipient=0241234567&message=",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "send"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "1",
+                      "description": "Must be 1.",
+                      "disabled": false
+                    },
+                    {
+                      "key": "senderid",
+                      "value": "Moolre",
+                      "description": "Registered and approved Sender ID.",
+                      "disabled": false
+                    },
+                    {
+                      "key": "recipient",
+                      "value": "0241234567",
+                      "description": "Recipient phone number.",
+                      "disabled": false
+                    },
+                    {
+                      "key": "message",
+                      "value": "",
+                      "description": "Message content (max 160 characters).",
+                      "disabled": false
+                    }
+                  ]
+                }
+              },
+              "status": "Authentication Error",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 0,\n  \"code\": \"AIN01\",\n  \"message\": \"Authentication Error\",\n  \"data\": null,\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "SMS Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-VASKEY",
+                "value": "{{smsVasKey}}",
+                "type": "text",
+                "description": "Your SMS API VAS key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Check the delivery status of sent SMS messages. Note: This API requires X-API-VASKEY in the header for authentication.\n\nDocs route: https://docs.moolre.com/api/sms/status\n\nRequest notes:\n- `type`: Must be 5.\n- `ref`: Array of message references to check.",
+            "url": {
+              "raw": "{{baseUrl}}/open/sms/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "sms",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 5,\n  \"ref\": [\n    \"uuid-001\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 5,\n  \"ref\": [\n    \"uuid-001\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"ASMQ10\",\n  \"message\": \"SMS Status\",\n  \"data\": [\n    {\n      \"ref\": \"0338954001737166274\",\n      \"status\": 3\n    },\n    {\n      \"ref\": \"uuid--001\",\n      \"status\": 2\n    }\n  ],\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Sender ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-VASKEY",
+                "value": "{{smsVasKey}}",
+                "type": "text",
+                "description": "Your SMS API VAS key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Request a new Sender ID for your SMS campaigns. Note: This API requires X-API-VASKEY in the header for authentication.\n\nDocs route: https://docs.moolre.com/api/sms/sender-ids\n\nRequest notes:\n- `type`: ID of the sender ID creation function. Must be 3.\n- `senderids`: An array of sender ID objects containing senderid (max 11 chars) and optional approve boolean.",
+            "url": {
+              "raw": "{{baseUrl}}/open/sms/query",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "sms",
+                "query"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 3,\n  \"senderids\": [\n    {\n      \"senderid\": \"Moolre\",\n      \"approve\": false\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/query",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "query"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 3,\n  \"senderids\": [\n    {\n      \"senderid\": \"Moolre\",\n      \"approve\": false\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"ASMQ12\",\n  \"message\": \"Sender IDs Created Successfully.\",\n  \"data\": null,\n  \"go\": null\n}"
+            },
+            {
+              "name": "400 - Permission Denied",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/query",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "query"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 3,\n  \"senderids\": [\n    {\n      \"senderid\": \"Moolre\",\n      \"approve\": false\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Permission Denied",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 0,\n  \"code\": \"ASMQ09\",\n  \"message\": \"You do not have permission to approve Sender IDs. Contact Customer Support.\",\n  \"data\": \"senderid\",\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Sender ID Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-VASKEY",
+                "value": "{{smsVasKey}}",
+                "type": "text",
+                "description": "Your SMS API VAS key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Check the approval status of a Sender ID. Note: This API requires X-API-VASKEY in the header for authentication.\n\nDocs route: https://docs.moolre.com/api/sms/sender-ids/status\n\nRequest notes:\n- `type`: ID of the sender ID status function. Must be 1.\n- `senderid`: Sender ID to check.",
+            "url": {
+              "raw": "{{baseUrl}}/open/sms/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "sms",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 1,\n  \"senderid\": \"Moolre\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 (Success) - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"senderid\": \"Moolre\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"ASMQ01\",\n  \"message\": \"Sender ID Status\",\n  \"data\": {\n    \"senderid\": \"SmartSMS\",\n    \"approval\": \"Approved\",\n    \"whitelisted\": false\n  },\n  \"go\": null\n}"
+            },
+            {
+              "name": "200 (Pending) - Pending",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"senderid\": \"Moolre\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Pending",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"ASMQ01\",\n  \"message\": \"Sender ID Status\",\n  \"data\": {\n    \"senderid\": \"Dummy\",\n    \"approval\": \"Pending\",\n    \"whitelisted\": false\n  },\n  \"go\": null\n}"
+            },
+            {
+              "name": "200 (Rejected) - Rejected",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"senderid\": \"Moolre\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Rejected",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"ASMQ01\",\n  \"message\": \"Sender ID Status\",\n  \"data\": {\n    \"senderid\": \"Momo\",\n    \"approval\": \"Rejected\",\n    \"whitelisted\": false\n  },\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "List Sender IDs",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-VASKEY",
+                "value": "{{smsVasKey}}",
+                "type": "text",
+                "description": "Your SMS API VAS key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Retrieve a list of all your registered Sender IDs along with their status. Note: This API requires X-API-VASKEY in the header for authentication.\n\nDocs route: https://docs.moolre.com/api/sms/sender-ids/list\n\nRequest notes:\n- `type`: ID of the list sender IDs function. Must be 7.",
+            "url": {
+              "raw": "{{baseUrl}}/open/sms/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "sms",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 7\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 7\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"ASMQ08\",\n  \"message\": \"List of Your Sender IDs.\",\n  \"data\": [\n    {\n      \"id\": 13,\n      \"senderid\": \"SmartSMS\",\n      \"approval\": \"Approved\",\n      \"whitelisted\": false\n    },\n    {\n      \"id\": 14,\n      \"senderid\": \"Dummy\",\n      \"approval\": \"Pending\",\n      \"whitelisted\": false\n    },\n    {\n      \"id\": 15,\n      \"senderid\": \"Dymmy ID\",\n      \"approval\": \"Pending\",\n      \"whitelisted\": false\n    },\n    {\n      \"id\": 4010,\n      \"senderid\": \"Momo\",\n      \"approval\": \"Rejected\",\n      \"whitelisted\": false\n    }\n  ],\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Approve Sender ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-VASKEY",
+                "value": "{{smsVasKey}}",
+                "type": "text",
+                "description": "Your SMS API VAS key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Approve or reject registered Sender IDs. Note: This API requires X-API-VASKEY in the header for authentication and specific administrative permissions.\n\nDocs route: https://docs.moolre.com/api/sms/sender-ids/approval\n\nRequest notes:\n- `type`: ID of the approve sender ID function. Must be 6.\n- `senderids`: An array of sender ID objects containing senderid and approve (0 = Pending, 1 = Approved, 2 = Rejected).",
+            "url": {
+              "raw": "{{baseUrl}}/open/sms/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "sms",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 6,\n  \"senderids\": [\n    {\n      \"senderid\": \"Moolre\",\n      \"approve\": false\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 6,\n  \"senderids\": [\n    {\n      \"senderid\": \"Moolre\",\n      \"approve\": false\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"ASMQ07\",\n  \"message\": \"Sender IDs updated successfully.\",\n  \"data\": [\n    {\n      \"id\": \"14\",\n      \"senderid\": \"Dummy\",\n      \"approval\": \"Approved\",\n      \"whitelisted\": false\n    },\n    {\n      \"id\": \"13\",\n      \"senderid\": \"SmartSMS\",\n      \"approval\": \"Rejected\",\n      \"whitelisted\": false\n    }\n  ],\n  \"go\": null\n}"
+            },
+            {
+              "name": "400 - Permission Denied",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 6,\n  \"senderids\": [\n    {\n      \"senderid\": \"Moolre\",\n      \"approve\": false\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Permission Denied",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 0,\n  \"code\": \"ASMQ09\",\n  \"message\": \"You do not have permission to update Sender IDs. Contact Customer Support.\",\n  \"data\": \"senderid\",\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "SMS Account Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-VASKEY",
+                "value": "{{smsVasKey}}",
+                "type": "text",
+                "description": "Your SMS API VAS key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Check your SMS credit balance. Note: This API requires X-API-VASKEY in the header for authentication.\n\nDocs route: https://docs.moolre.com/api/sms/account-status\n\nRequest notes:\n- `type`: Must be 2.",
+            "url": {
+              "raw": "{{baseUrl}}/open/sms/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "sms",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 2\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{smsVasKey}}",
+                    "type": "text",
+                    "description": "Your SMS API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/sms/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "sms",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 2\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"ASMQ03\",\n  \"message\": \"Account Status\",\n  \"data\": {\n    \"balance\": 857\n  },\n  \"go\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "WhatsApp",
+      "description": "Manage WhatsApp templates, send templated messages, and retrieve message status.",
+      "item": [
+        {
+          "name": "Get Templates",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "X-API-VASKEY",
+                "value": "{{whatsAppVasKey}}",
+                "type": "text",
+                "description": "Your WhatsApp API VAS key."
+              }
+            ],
+            "description": "Fetch your approved WhatsApp message templates. Note: This API requires X-API-VASKEY in the header for authentication.\n\nDocs route: https://docs.moolre.com/api/whatsapp/templates",
+            "url": {
+              "raw": "{{baseUrl}}/open/whatsapp/template",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "whatsapp",
+                "template"
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 (Approved) - Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{whatsAppVasKey}}",
+                    "type": "text",
+                    "description": "Your WhatsApp API VAS key."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/whatsapp/template",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "whatsapp",
+                    "template"
+                  ]
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"WAS200\",\n  \"message\": \"Templates retrieved successfully\",\n  \"data\": [\n    {\n      \"id\": \"1218877297066056\",\n      \"name\": \"promotion\",\n      \"language\": \"en\",\n      \"status\": \"APPROVED\",\n      \"message\": \"Hello {{1}},\\n\\nMelchizedek Technologies would like to share information about our {{2}} designed to support businesses like {{3}}.\\n\\nIf you would like to learn more or speak with our team, please reply to this message and we will be happy to assist.\\n\",\n      \"placeholders\": [\n        \"1\",\n        \"2\",\n        \"3\"\n      ]\n    }\n  ],\n  \"next\": \"opaque-cursor-for-the-next-page\"\n}"
+            },
+            {
+              "name": "200 (Rejected) - Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{whatsAppVasKey}}",
+                    "type": "text",
+                    "description": "Your WhatsApp API VAS key."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/whatsapp/template",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "whatsapp",
+                    "template"
+                  ]
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"WAS200\",\n  \"message\": \"Templates retrieved successfully\",\n  \"data\": [\n    {\n      \"id\": \"1470051854524583\",\n      \"name\": \"whatsapp_test\",\n      \"language\": \"en\",\n      \"status\": \"REJECTED\",\n      \"message\": \"Hello {{1}},\\n\\nYou are receiving this message from Melchizedek Technologies in response to your request with {{2}}.\\n\\nIf you need any assistance, please reply to this message and our support team will assist you.\\n\",\n      \"placeholders\": [\n        \"1\",\n        \"2\"\n      ]\n    }\n  ],\n  \"next\": null\n}"
+            },
+            {
+              "name": "200 (Pending) - Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{whatsAppVasKey}}",
+                    "type": "text",
+                    "description": "Your WhatsApp API VAS key."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/whatsapp/template",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "whatsapp",
+                    "template"
+                  ]
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"WAS200\",\n  \"message\": \"Templates retrieved successfully\",\n  \"data\": [\n    {\n      \"id\": \"1709192906730643\",\n      \"name\": \"update\",\n      \"language\": \"en\",\n      \"status\": \"PENDING\",\n      \"message\": \"Hello {{1}},\\n\\nThank you for contacting Melchizedek Technologies.\\nYour request regarding {{2}} has been received and our team will assist you shortly.\\n\",\n      \"placeholders\": [\n        \"1\",\n        \"2\"\n      ]\n    }\n  ],\n  \"next\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Send Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-VASKEY",
+                "value": "{{whatsAppVasKey}}",
+                "type": "text",
+                "description": "Your WhatsApp API VAS key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Send batch WhatsApp messages using an approved template name. The unique reference (ref) is optional; however, without it, the message status cannot be tracked.\n\nDocs route: https://docs.moolre.com/api/whatsapp/messages\n\nRequest notes:\n- `template_name`: The name of the approved WhatsApp template.\n- `language`: The language code for the template (English only).\n- `messages`: An array of message objects containing recipient, optional ref, and placeholders. Note: If ref is omitted, the status cannot be checked later.",
+            "url": {
+              "raw": "{{baseUrl}}/open/whatsapp/send",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "whatsapp",
+                "send"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"template_name\": \"feedback\",\n  \"language\": \"en\",\n  \"messages\": [\n    {\n      \"recipient\": \"233531419000\",\n      \"ref\": \"879883HGUGF45583499HF2089005\",\n      \"placeholders\": [\n        \"John Doe\"\n      ]\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 (Success) - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{whatsAppVasKey}}",
+                    "type": "text",
+                    "description": "Your WhatsApp API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/whatsapp/send",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "whatsapp",
+                    "send"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"template_name\": \"feedback\",\n  \"language\": \"en\",\n  \"messages\": [\n    {\n      \"recipient\": \"233531419000\",\n      \"ref\": \"879883HGUGF45583499HF2089005\",\n      \"placeholders\": [\n        \"John Doe\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"WAS200\",\n  \"message\": \"suceess\",\n  \"error\": [],\n  \"data\": []\n}"
+            },
+            {
+              "name": "200 (Duplicate Refs) - Warning",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{whatsAppVasKey}}",
+                    "type": "text",
+                    "description": "Your WhatsApp API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/whatsapp/send",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "whatsapp",
+                    "send"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"template_name\": \"feedback\",\n  \"language\": \"en\",\n  \"messages\": [\n    {\n      \"recipient\": \"233531419000\",\n      \"ref\": \"879883HGUGF45583499HF2089005\",\n      \"placeholders\": [\n        \"John Doe\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Warning",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"WAS200\",\n  \"error\": \"Some ref are not unique, corresponding messages will not be sent\",\n  \"message\": \"\",\n  \"data\": [\n    {\n      \"recipient\": \"233531419000\",\n      \"ref\": \"879883HGU334553GF887799HF20004\"\n    },\n    {\n      \"recipient\": \"233531419011\",\n      \"ref\": \"879883HGU334553GF887799HF20006\"\n    }\n  ]\n}"
+            },
+            {
+              "name": "401 (Insufficient Balance) - Insufficient Balance",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{whatsAppVasKey}}",
+                    "type": "text",
+                    "description": "Your WhatsApp API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/whatsapp/send",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "whatsapp",
+                    "send"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"template_name\": \"feedback\",\n  \"language\": \"en\",\n  \"messages\": [\n    {\n      \"recipient\": \"233531419000\",\n      \"ref\": \"879883HGUGF45583499HF2089005\",\n      \"placeholders\": [\n        \"John Doe\"\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Insufficient Balance",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 0,\n  \"code\": \"WAS401\",\n  \"message\": \"Insufficient balance to send messages. Please top up your WhatsApp bundle.\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Message Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-VASKEY",
+                "value": "{{whatsAppVasKey}}",
+                "type": "text",
+                "description": "Your WhatsApp API VAS key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Track the delivery status of your WhatsApp messages using their unique references. Supports batch status checks.\n\nDocs route: https://docs.moolre.com/api/whatsapp/messages/status\n\nRequest notes:\n- `ref`: An array of unique message references to check.",
+            "url": {
+              "raw": "{{baseUrl}}/open/whatsapp/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "whatsapp",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ref\": [\n    \"879883HGUGF45583499HF2089001\",\n    \"879883HGUGF45583499HF2089005\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 (Success) - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-VASKEY",
+                    "value": "{{whatsAppVasKey}}",
+                    "type": "text",
+                    "description": "Your WhatsApp API VAS key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/whatsapp/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "whatsapp",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ref\": [\n    \"879883HGUGF45583499HF2089001\",\n    \"879883HGUGF45583499HF2089005\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"WAS200\",\n  \"message\": \"success\",\n  \"data\": [\n    {\n      \"ref\": \"879883HGUGF45583499HF2089001\",\n      \"status\": \"read\"\n    },\n    {\n      \"ref\": \"879883HGUGF45583499HF2089005\",\n      \"status\": \"accepted\"\n    }\n  ]\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Account",
+      "description": "Create and manage Moolre wallets, account settings, balances, and transaction history.",
+      "item": [
+        {
+          "name": "Create Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{apiKey}}",
+                "type": "text",
+                "description": "Your Private API Key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Create a new business wallet/account.\n\nDocs route: https://docs.moolre.com/api/accounts/create\n\nRequest notes:\n- `type`: Must be 1.\n- `accountname`: Registered name of the business.\n- `currency`: Currency code: GHS (Ghana Cedis).\n- `api`: Set to true to enable API transactions for the new account.\n- `callback`: Webhook URL for processing real-time transaction callbacks.\n- `settlement`: Required settlement object. Leave frequency, channel, recipient, and sublist empty when automatic settlement is not configured.",
+            "url": {
+              "raw": "{{baseUrl}}/open/account/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "account",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 1,\n  \"accountname\": \"Main Business Wallet\",\n  \"currency\": \"GHS\",\n  \"api\": true,\n  \"callback\": \"https://example.com/webhooks/moolre\",\n  \"settlement\": {\n    \"currency\": \"GHS\",\n    \"frequency\": \"\",\n    \"channel\": \"\",\n    \"recipient\": \"\",\n    \"sublist\": \"\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-KEY",
+                    "value": "{{apiKey}}",
+                    "type": "text",
+                    "description": "Your Private API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/account/create",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "account",
+                    "create"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"accountname\": \"Main Business Wallet\",\n  \"currency\": \"GHS\",\n  \"api\": true,\n  \"callback\": \"https://example.com/webhooks/moolre\",\n  \"settlement\": {\n    \"currency\": \"GHS\",\n    \"frequency\": \"\",\n    \"channel\": \"\",\n    \"recipient\": \"\",\n    \"sublist\": \"\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"1\",\n  \"code\": \"WC02\",\n  \"message\": [\n    \"Wallet Created Successfully\",\n    \"Your wallet will be reloaded shortly or Click close to refresh now.\"\n  ],\n  \"data\": {\n    \"status\": 1,\n    \"accountnumber\": \"100000157291\",\n    \"accountname\": \"My Business LTD\",\n    \"paymentid\": \"0757291\",\n    \"api\": 0,\n    \"callback\": \"\",\n    \"settlement\": {},\n    \"secret\": \"cf2a797f-c8d8-470c-a736-6f5f78ae1d86\"\n  },\n  \"go\": [\n    \"wallets\",\n    \"1.57291\"\n  ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Update Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{apiKey}}",
+                "type": "text",
+                "description": "Your Private API Key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Update business wallet/account details and settlement settings.\n\nDocs route: https://docs.moolre.com/api/accounts/update\n\nRequest notes:\n- `type`: Must be 1.\n- `accountnumber`: The account number you want to update.\n- `currency`: Account currency. This endpoint always requires GHS.",
+            "url": {
+              "raw": "{{baseUrl}}/open/account/update",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "account",
+                "update"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 1,\n  \"accountnumber\": \"{{accountNumber}}\",\n  \"currency\": \"GHS\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-KEY",
+                    "value": "{{apiKey}}",
+                    "type": "text",
+                    "description": "Your Private API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/account/update",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "account",
+                    "update"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"accountnumber\": \"{{accountNumber}}\",\n  \"currency\": \"GHS\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"1\",\n  \"code\": \"WCU02\",\n  \"message\": \"Account Updated Successfully\",\n  \"data\": {\n    \"status\": 1,\n    \"accountnumber\": \"100000157257\",\n    \"accountname\": \"My Business PLC\",\n    \"paymentid\": \"0757257\",\n    \"api\": 0,\n    \"callback\": \"https://nocall.com/noend\",\n    \"settlement\": {\n      \"currency\": \"GHS\",\n      \"frequency\": \"1\",\n      \"channel\": \"1\",\n      \"recipient\": \"0246798090\",\n      \"sublist\": \"300303\"\n    },\n    \"secret\": \"bcec3865-bea1-4a99-8e70-c6a434cac757\"\n  },\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Account Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{apiKey}}",
+                "type": "text",
+                "description": "Your Private API Key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Check wallet balance and status.\n\nDocs route: https://docs.moolre.com/api/accounts/status\n\nRequest notes:\n- `type`: Must be 1.\n- `accountnumber`: Account number to check.",
+            "url": {
+              "raw": "{{baseUrl}}/open/account/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "account",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 1,\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-KEY",
+                    "value": "{{apiKey}}",
+                    "type": "text",
+                    "description": "Your Private API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/account/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "account",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"SW01\",\n  \"message\": \"Wallet Found\",\n  \"data\": {\n    \"balance\": 10.67,\n    \"accountname\": \"Zagey\",\n    \"activated\": \"1\",\n    \"callback\": \"https://moolre.requestcatcher.com/test\"\n  },\n  \"go\": null\n}"
+            },
+            {
+              "name": "401 - Authentication Error",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-KEY",
+                    "value": "{{apiKey}}",
+                    "type": "text",
+                    "description": "Your Private API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/account/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "account",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Authentication Error",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 0,\n  \"code\": \"AIN04\",\n  \"message\": \"Authentication Error, API Access not activated.\",\n  \"data\": \"all\",\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "List Transactions",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{apiKey}}",
+                "type": "text",
+                "description": "Your Private API Key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Fetch a list of transactions linked with a specific account.\n\nDocs route: https://docs.moolre.com/api/accounts/transactions\n\nRequest notes:\n- `type`: Must be 2.\n- `accountnumber`: Your Account Number.\n- `enddate`: End date (YYYY-MM-DD HH:MM:SS). Defaults to the last second of the current year.\n- `status`: Optional status filter: 0=Pending, 1=Successful, 2=Failed.",
+            "url": {
+              "raw": "{{baseUrl}}/open/account/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "account",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 2,\n  \"accountnumber\": \"{{accountNumber}}\",\n  \"enddate\": \"2026-12-31 23:59:59\",\n  \"status\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-KEY",
+                    "value": "{{apiKey}}",
+                    "type": "text",
+                    "description": "Your Private API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/account/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "account",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 2,\n  \"accountnumber\": \"{{accountNumber}}\",\n  \"enddate\": \"2026-12-31 23:59:59\",\n  \"status\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"ST08\",\n  \"message\": \"Transactions Found\",\n  \"data\": {\n    \"txcount\": \"1\",\n    \"transactions\": [\n      {\n        \"txstatus\": 1,\n        \"txtype\": 1,\n        \"accountnumber\": \"100000100002\",\n        \"payer\": \"233551300186\",\n        \"payee\": \"Zagey\",\n        \"amount\": \"1.00\",\n        \"value\": \"1\",\n        \"transactionid\": \"34008096\",\n        \"externalref\": \"0\",\n        \"thirdpartyref\": \"55730796319\",\n        \"ts\": \"2025-04-15 12:36:28\"\n      }\n    ]\n  },\n  \"go\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Transfer",
+      "description": "Validate recipients, send payouts, move funds between Moolre accounts, and track transfer status.",
+      "item": [
+        {
+          "name": "Validate Name",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{apiKey}}",
+                "type": "text",
+                "description": "Your API Key (accepts both Public Key and Private Key)."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Confirm the name of a Mobile Money or Bank Account holder before initiating a transfer.\n\nDocs route: https://docs.moolre.com/api/transfers/validate-name\n\nRequest notes:\n- `type`: Must be 1.\n- `receiver`: Phone number or bank account number.\n- `channel`: 1=MTN, 6=Telecel, 7=AT, 2=Instant Bank Transfer.\n- `sublistid`: Required when channel is 2 (Instant Bank Transfer). Use the bank code returned by Get banks.\n- `currency`: Currency code: GHS (Ghana Cedis) or NGN (Nigerian Naira).\n- `accountnumber`: Your Moolre Account Number.",
+            "url": {
+              "raw": "{{baseUrl}}/open/transact/validate",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "transact",
+                "validate"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 1,\n  \"receiver\": \"0531419000\",\n  \"channel\": \"1\",\n  \"currency\": \"GHS\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-KEY",
+                    "value": "{{apiKey}}",
+                    "type": "text",
+                    "description": "Your API Key (accepts both Public Key and Private Key)."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/validate",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "validate"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"receiver\": \"0531419000\",\n  \"channel\": \"1\",\n  \"currency\": \"GHS\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"AVD01\",\n  \"message\": \"Successful\",\n  \"data\": \"BRIGHT BUAME\",\n  \"go\": null\n}"
+            },
+            {
+              "name": "400 - Not Found",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-KEY",
+                    "value": "{{apiKey}}",
+                    "type": "text",
+                    "description": "Your API Key (accepts both Public Key and Private Key)."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/validate",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "validate"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"receiver\": \"0531419000\",\n  \"channel\": \"1\",\n  \"currency\": \"GHS\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 0,\n  \"code\": \"AVD02\",\n  \"message\": \"Phone No. not found\",\n  \"data\": \"Phone No. not found\",\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Initiate Transfer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{apiKey}}",
+                "type": "text",
+                "description": "Your API Key (Private Key only)."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Send money to a Mobile Money or Bank Account instantly.\n\nDocs route: https://docs.moolre.com/api/transfers/initiate\n\nRequest notes:\n- `type`: Must be 1.\n- `channel`: Numeric channel code: 1=MTN, 6=Telecel, 7=AT, or 2=Instant Bank Transfer.\n- `currency`: Currency code: GHS (Ghana Cedis) or NGN (Nigerian Naira).\n- `amount`: Amount to transfer. Must be greater than 0.\n- `receiver`: Recipient mobile number (begin with 0) or bank account number.\n- `sublistid`: Required when channel is 2 (Instant Bank Transfer). Use the bank code returned by Get banks.\n- `externalref`: Unique reference for the transfer.\n- `accountnumber`: Your Moolre Account Number.",
+            "url": {
+              "raw": "{{baseUrl}}/open/transact/transfer",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "transact",
+                "transfer"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 1,\n  \"channel\": \"1\",\n  \"currency\": \"GHS\",\n  \"amount\": \"1.00\",\n  \"receiver\": \"0241234567\",\n  \"externalref\": \"TRF-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-KEY",
+                    "value": "{{apiKey}}",
+                    "type": "text",
+                    "description": "Your API Key (Private Key only)."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/transfer",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "transfer"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"channel\": \"1\",\n  \"currency\": \"GHS\",\n  \"amount\": \"1.00\",\n  \"receiver\": \"0241234567\",\n  \"externalref\": \"TRF-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"1\",\n  \"code\": \"OBGH01\",\n  \"message\": [\n    \"Pay out Successful\",\n    \"Click close to view transactions.\"\n  ],\n  \"data\": {\n    \"txstatus\": 1,\n    \"receiver\": \"0246798993\",\n    \"transactionid\": \"32759150\",\n    \"externalref\": \"28171451\",\n    \"thirdpartyref\": \"901733241086\",\n    \"receivername\": \"YUSIF YA-ADZAGEY\",\n    \"amount\": \"1\",\n    \"amountfee\": \"1.01\",\n    \"networkfee\": \"0.00\",\n    \"fee\": \"0.01\"\n  },\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Transfer Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{apiKey}}",
+                "type": "text",
+                "description": "Your API Key (accepts both Public Key and Private Key)."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Check the final status of a previously initiated transfer.\n\nDocs route: https://docs.moolre.com/api/transfers/status\n\nRequest notes:\n- `type`: Must be 1.\n- `idtype`: 1 = Unique externalref, 2 = Moolre Generated ID.\n- `id`: The reference ID to check.\n- `accountnumber`: Your Moolre Account Number.",
+            "url": {
+              "raw": "{{baseUrl}}/open/transact/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "transact",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 1,\n  \"idtype\": 1,\n  \"id\": \"TRF-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-KEY",
+                    "value": "{{apiKey}}",
+                    "type": "text",
+                    "description": "Your API Key (accepts both Public Key and Private Key)."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"idtype\": 1,\n  \"id\": \"TRF-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"SS01\",\n  \"message\": \"Transaction Successful\",\n  \"data\": {\n    \"txstatus\": 1,\n    \"txtype\": 2,\n    \"accountnumber\": \"100000100002\",\n    \"payer\": \"\",\n    \"payee\": \"0246798993\",\n    \"amount\": \"5\",\n    \"value\": \"5\",\n    \"transactionid\": \"31830714\",\n    \"externalref\": \"1231231-12985\",\n    \"thirdpartyref\": \"141704447750\",\n    \"ts\": \"2024-01-05 09:42:33\"\n  },\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Internal Transfer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-KEY",
+                "value": "{{apiKey}}",
+                "type": "text",
+                "description": "Your Private API Key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Initiate an internal transfer using your Moolre account.\n\nDocs route: https://docs.moolre.com/api/transfers/internal\n\nRequest notes:\n- `type`: Must be 1.\n- `currency`: Currency code: GHS (Ghana Cedis) or NGN (Nigerian Naira).\n- `amount`: Amount to transfer. Must be greater than 0.\n- `receiver`: Destination Moolre account number. This must not be a mobile phone number.\n- `externalref`: Unique reference for the transfer.\n- `accountnumber`: Your Moolre Account Number.",
+            "url": {
+              "raw": "{{baseUrl}}/open/transact/internal",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "transact",
+                "internal"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 1,\n  \"currency\": \"GHS\",\n  \"amount\": \"1.00\",\n  \"receiver\": \"{{receiverAccountNumber}}\",\n  \"externalref\": \"INT-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-KEY",
+                    "value": "{{apiKey}}",
+                    "type": "text",
+                    "description": "Your Private API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/internal",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "internal"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"currency\": \"GHS\",\n  \"amount\": \"1.00\",\n  \"receiver\": \"{{receiverAccountNumber}}\",\n  \"externalref\": \"INT-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"TR099\",\n  \"message\": \"Internal transfer initiated successfully\",\n  \"data\": \"f25fc80e-791b-495b-8799-dcf87660457d\",\n  \"go\": null\n}"
+            },
+            {
+              "name": "400 - Duplicate Reference",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-KEY",
+                    "value": "{{apiKey}}",
+                    "type": "text",
+                    "description": "Your Private API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/internal",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "internal"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"currency\": \"GHS\",\n  \"amount\": \"1.00\",\n  \"receiver\": \"{{receiverAccountNumber}}\",\n  \"externalref\": \"INT-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Duplicate Reference",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"0\",\n  \"code\": \"TR013\",\n  \"message\": \"External Reference is required and must be unique.\",\n  \"data\": \"externalref\",\n  \"go\": null\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Payment",
+      "description": "Collect payments, create payment IDs and bank accounts, generate payment links, and check payment status.",
+      "item": [
+        {
+          "name": "Mobile Money Collection",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-PUBKEY",
+                "value": "{{apiPublicKey}}",
+                "type": "text",
+                "description": "Your Public API Key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Send a USSD payment request to a payer's phone number for approval.\n\nDocs route: https://docs.moolre.com/api/payments/initiate\n\nRequest notes:\n- `type`: Must be 1.\n- `channel`: Numeric channel code: 13=MTN, 6=Telecel, or 7=AT.\n- `currency`: Currency code: GHS (Ghana Cedis) or NGN (Nigerian Naira).\n- `payer`: Customer's phone number. Use the local 0-prefixed format.\n- `amount`: Amount to collect. Must be greater than 0.\n- `externalref`: Unique reference for the payment.\n- `accountnumber`: Your Moolre Account Number.\n- `skipotp`: Sandbox only. Set true to skip OTP simulation; defaults to false. Omitted from this environment-neutral sample request.",
+            "url": {
+              "raw": "{{baseUrl}}/open/transact/payment",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "transact",
+                "payment"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 1,\n  \"channel\": \"13\",\n  \"currency\": \"GHS\",\n  \"payer\": \"0241234567\",\n  \"amount\": \"1.00\",\n  \"externalref\": \"PAY-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 (OTP Required) - OTP Required",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-PUBKEY",
+                    "value": "{{apiPublicKey}}",
+                    "type": "text",
+                    "description": "Your Public API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/payment",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "payment"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"channel\": \"13\",\n  \"currency\": \"GHS\",\n  \"payer\": \"0241234567\",\n  \"amount\": \"1.00\",\n  \"externalref\": \"PAY-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OTP Required",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"TP14\",\n  \"message\": \"Please complete the verification process sent to you via SMS and try again.\",\n  \"data\": \"all\",\n  \"go\": null\n}"
+            },
+            {
+              "name": "200 (Payment Request) - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-PUBKEY",
+                    "value": "{{apiPublicKey}}",
+                    "type": "text",
+                    "description": "Your Public API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/payment",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "payment"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"channel\": \"13\",\n  \"currency\": \"GHS\",\n  \"payer\": \"0241234567\",\n  \"amount\": \"1.00\",\n  \"externalref\": \"PAY-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"TR099\",\n  \"message\": null,\n  \"data\": \"f25fc80e-791b-495b-8799-dcf87660457d\",\n  \"go\": null\n}"
+            },
+            {
+              "name": "400 - Duplicate Reference",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-PUBKEY",
+                    "value": "{{apiPublicKey}}",
+                    "type": "text",
+                    "description": "Your Public API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/payment",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "payment"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"channel\": \"13\",\n  \"currency\": \"GHS\",\n  \"payer\": \"0241234567\",\n  \"amount\": \"1.00\",\n  \"externalref\": \"PAY-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Duplicate Reference",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"0\",\n  \"code\": \"TP13\",\n  \"message\": \"External Reference is required and must be unique.\",\n  \"data\": \"externalref\",\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Create Payment ID",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-PUBKEY",
+                "value": "{{apiPublicKey}}",
+                "type": "text",
+                "description": "Your Public API Key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Generate a unique permanent payment ID for use in making payments. In Live mode, customers dial *203*paymentid#; in Sandbox mode, they dial *203*6000*paymentid#.\n\nDocs route: https://docs.moolre.com/api/payments/payment-id\n\nRequest notes:\n- `type`: ID of the function. Must be 2.\n- `phone`: Phone number of the customer in +233 format (e.g., +233267606822).\n- `name`: Name of the Customer or a Unique ID.\n- `currency`: Currency of your account/wallet: GHS (Ghana Cedis) or NGN (Nigerian Naira).\n- `amount`: Optional preset payment amount. Omit it to create a Payment ID without a preset limit; when provided, it must be greater than 0.\n- `externalref`: Unique external reference for this request.\n- `accountnumber`: Your Moolre Account Number.",
+            "url": {
+              "raw": "{{baseUrl}}/open/account/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "account",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 2,\n  \"phone\": \"+233241234567\",\n  \"name\": \"Customer 001\",\n  \"currency\": \"GHS\",\n  \"amount\": \"1.00\",\n  \"externalref\": \"PAY-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-PUBKEY",
+                    "value": "{{apiPublicKey}}",
+                    "type": "text",
+                    "description": "Your Public API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/account/create",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "account",
+                    "create"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 2,\n  \"phone\": \"+233241234567\",\n  \"name\": \"Customer 001\",\n  \"currency\": \"GHS\",\n  \"amount\": \"1.00\",\n  \"externalref\": \"PAY-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"AD14\",\n  \"message\": \"Terminal Creation Successful\",\n  \"data\": {\n    \"paymentid\": \"08160984\",\n    \"name\": \"Kofi Adeniyi\",\n    \"qrcode\": null\n  },\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Bank Collections",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-PUBKEY",
+                "value": "{{apiPublicKey}}",
+                "type": "text",
+                "description": "Your Public API Key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Generate a permanent virtual bank account number linked to your wallet/account for secure payments.\n\nDocs route: https://docs.moolre.com/api/payments/virtual-account\n\nRequest notes:\n- `type`: Must be 9.\n- `currency`: Currency code: GHS (Ghana Cedis) or NGN (Nigerian Naira).\n- `amount`: Optional initial amount. When provided, it must be greater than 0.\n- `firstname`: First name of the account holder.\n- `lastname`: Last name of the account holder.\n- `phone`: Phone number of the account holder.\n- `email`: Email address of the account holder.\n- `externalref`: Unique external reference for this request.\n- `accountnumber`: Your Moolre Account Number.",
+            "url": {
+              "raw": "{{baseUrl}}/open/account/create",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "account",
+                "create"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 9,\n  \"currency\": \"GHS\",\n  \"amount\": 0.5,\n  \"firstname\": \"Kofi\",\n  \"lastname\": \"Adeniyi2\",\n  \"phone\": \"+233267606822\",\n  \"email\": \"zagey@moolre.com\",\n  \"externalref\": \"BANK-1001\",\n  \"accountnumber\": \"100000100002\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-PUBKEY",
+                    "value": "{{apiPublicKey}}",
+                    "type": "text",
+                    "description": "Your Public API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/account/create",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "account",
+                    "create"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 9,\n  \"currency\": \"GHS\",\n  \"amount\": 0.5,\n  \"firstname\": \"Kofi\",\n  \"lastname\": \"Adeniyi2\",\n  \"phone\": \"+233267606822\",\n  \"email\": \"zagey@moolre.com\",\n  \"externalref\": \"BANK-1001\",\n  \"accountnumber\": \"100000100002\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"AD19\",\n  \"message\": \"Account No. Creation Successful\",\n  \"data\": {\n    \"accountno\": \"0014730001001\",\n    \"accountname\": \"Kofi Adeniyi3 MoolrePay\",\n    \"bankname\": \"First Atlantic Bank\",\n    \"externalref\": \"BANK-1001\"\n  },\n  \"go\": null\n}"
+            },
+            {
+              "name": "400 (Duplicate Name) - Failed",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-PUBKEY",
+                    "value": "{{apiPublicKey}}",
+                    "type": "text",
+                    "description": "Your Public API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/account/create",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "account",
+                    "create"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 9,\n  \"currency\": \"GHS\",\n  \"amount\": 0.5,\n  \"firstname\": \"Kofi\",\n  \"lastname\": \"Adeniyi2\",\n  \"phone\": \"+233267606822\",\n  \"email\": \"zagey@moolre.com\",\n  \"externalref\": \"BANK-1001\",\n  \"accountnumber\": \"100000100002\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Failed",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 0,\n  \"code\": \"AD32\",\n  \"message\": \"Account No. Creation Failed\",\n  \"data\": \"all\",\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Payment ID / Bank Account Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-PUBKEY",
+                "value": "{{apiPublicKey}}",
+                "type": "text",
+                "description": "Your Public API Key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Check whether a Payment ID or bank account has been found and retrieve its account and transaction details.\n\nDocs route: https://docs.moolre.com/api/payments/account-status\n\nRequest notes:\n- `type`: Must be 2 for Payment ID / Bank Account Status.\n- `externalref`: The external reference used when initiating the Payment ID or bank account transaction.\n- `accountnumber`: Your Moolre Account Number.",
+            "url": {
+              "raw": "{{baseUrl}}/open/transact/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "transact",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 2,\n  \"externalref\": \"ur12ef0011\",\n  \"accountnumber\": \"100000100002\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 (Found) - Found",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-PUBKEY",
+                    "value": "{{apiPublicKey}}",
+                    "type": "text",
+                    "description": "Your Public API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 2,\n  \"externalref\": \"ur12ef0011\",\n  \"accountnumber\": \"100000100002\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Found",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"AC01\",\n  \"message\": \"Payment ID / Bank Account Found\",\n  \"data\": {\n    \"account\": {\n      \"accountno\": \"0052030001001\",\n      \"txcount\": \"1\",\n      \"txvalue\": \"4.60\"\n    },\n    \"transactions\": {\n      \"txstatus\": 1,\n      \"txtype\": 1,\n      \"accountnumber\": \"100000100002\",\n      \"payer\": \"9040013020315\",\n      \"payee\": \"Zagey\",\n      \"amount\": \"5.00\",\n      \"value\": \"4.60\",\n      \"fee\": \"0.40\",\n      \"networkfee\": \"0.00\",\n      \"transactionid\": \"51531630\",\n      \"externalref\": \"ur12ef001\",\n      \"thirdpartyref\": \"2625201512860000\",\n      \"ts\": \"2026-09-09 14:20:41\"\n    },\n    \"go\": null\n  }\n}"
+            },
+            {
+              "name": "200 (Not Found) - Not Found",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-PUBKEY",
+                    "value": "{{apiPublicKey}}",
+                    "type": "text",
+                    "description": "Your Public API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 2,\n  \"externalref\": \"ur12ef0011\",\n  \"accountnumber\": \"100000100002\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"AC03\",\n  \"message\": \"Payment ID / Bank Account Not Found\",\n  \"data\": {\n    \"account\": null,\n    \"transactions\": {},\n    \"go\": null\n  }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Generate Payment Link",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-PUBKEY",
+                "value": "{{apiPublicKey}}",
+                "type": "text",
+                "description": "Your Public API Key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Create a hosted payment page URL. The Payment link system is used to generate a URL that opens a Moolre Web POS page for collecting payments.\n\nDocs route: https://docs.moolre.com/api/payments/links\n\nRequest notes:\n- `type`: Must be 1.\n- `amount`: Amount to be paid. Must be greater than 0.\n- `email`: Email of the business.\n- `externalref`: Unique ID to identify the payment.\n- `reusable`: Determines if the link can be used for repeat payments. 0=No, 1=Yes.\n- `expiration_time`: Link expiry time in minutes. Minimum 1 minute.\n- `currency`: Currency of your account/wallet: GHS (Ghana Cedis) or NGN (Nigerian Naira).\n- `accountnumber`: Your Moolre Account Number.",
+            "url": {
+              "raw": "{{baseUrl}}/embed/link",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "embed",
+                "link"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 1,\n  \"amount\": \"1.00\",\n  \"email\": \"customer@example.com\",\n  \"externalref\": \"ORDER-1001\",\n  \"reusable\": \"0\",\n  \"expiration_time\": 1,\n  \"currency\": \"GHS\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-PUBKEY",
+                    "value": "{{apiPublicKey}}",
+                    "type": "text",
+                    "description": "Your Public API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/embed/link",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "embed",
+                    "link"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"amount\": \"1.00\",\n  \"email\": \"customer@example.com\",\n  \"externalref\": \"ORDER-1001\",\n  \"reusable\": \"0\",\n  \"expiration_time\": 1,\n  \"currency\": \"GHS\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"POS09\",\n  \"message\": \"POS payment link successfully generated.\",\n  \"data\": {\n    \"authorization_url\": \"https://pos.moolre.com/RZWs1yB6amGjNoiEQvlHPS5uqgp3Jc\",\n    \"reference\": \"uuid-1234as2\"\n  }\n}"
+            },
+            {
+              "name": "400 - Duplicate Transaction",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-PUBKEY",
+                    "value": "{{apiPublicKey}}",
+                    "type": "text",
+                    "description": "Your Public API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/embed/link",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "embed",
+                    "link"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"amount\": \"1.00\",\n  \"email\": \"customer@example.com\",\n  \"externalref\": \"ORDER-1001\",\n  \"reusable\": \"0\",\n  \"expiration_time\": 1,\n  \"currency\": \"GHS\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Duplicate Transaction",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 0,\n  \"code\": \"INP02\",\n  \"message\": \"Transaction already exits!\",\n  \"data\": []\n}"
+            }
+          ]
+        },
+        {
+          "name": "Payment Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-API-USER",
+                "value": "{{apiUser}}",
+                "type": "text",
+                "description": "Your Moolre username."
+              },
+              {
+                "key": "X-API-PUBKEY",
+                "value": "{{apiPublicKey}}",
+                "type": "text",
+                "description": "Your Public API Key."
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Check the final status of a previously initiated mobile-money payment collection (type 1). Use Payment ID / Bank Account Status for type 2 account lookups.\n\nDocs route: https://docs.moolre.com/api/payments/status\n\nRequest notes:\n- `type`: Must be 1.\n- `idtype`: 1 = Unique externalref, 2 = Moolre Generated ID.\n- `id`: The reference ID to check.\n- `accountnumber`: Your Moolre Account Number.",
+            "url": {
+              "raw": "{{baseUrl}}/open/transact/status",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "transact",
+                "status"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": 1,\n  \"idtype\": 1,\n  \"id\": \"PAY-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "X-API-USER",
+                    "value": "{{apiUser}}",
+                    "type": "text",
+                    "description": "Your Moolre username."
+                  },
+                  {
+                    "key": "X-API-PUBKEY",
+                    "value": "{{apiPublicKey}}",
+                    "type": "text",
+                    "description": "Your Public API Key."
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text",
+                    "description": "JSON request body."
+                  }
+                ],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/status",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "status"
+                  ]
+                },
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"type\": 1,\n  \"idtype\": 1,\n  \"id\": \"PAY-1001\",\n  \"accountnumber\": \"{{accountNumber}}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"SS01\",\n  \"message\": \"Transaction Successful\",\n  \"data\": {\n    \"txstatus\": 1,\n    \"txtype\": 2,\n    \"accountnumber\": \"100000100002\",\n    \"payer\": \"\",\n    \"payee\": \"0209151872\",\n    \"amount\": \"1\",\n    \"value\": \"1\",\n    \"transactionid\": \"31772290\",\n    \"externalref\": \"1231231-128\",\n    \"thirdpartyref\": \"471700539041\",\n    \"ts\": \"2023-11-21 03:57:25\"\n  },\n  \"go\": null\n}"
+            }
+          ]
+        },
+        {
+          "name": "Payment Webhook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text",
+                "description": "JSON request body."
+              }
+            ],
+            "description": "Moolre sends real-time HTTP POST notifications (callbacks) to your server when a payment is received or its status changes.\n\nDocs route: https://docs.moolre.com/api/payments/webhook\n\nRequest notes:\n- `status`: 1 for success\n- `code`: P01\n- `message`: Transaction Successful\n- `data`: The transaction details",
+            "url": {
+              "raw": "{{callbackUrl}}",
+              "host": [
+                "{{callbackUrl}}"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": 1,\n  \"code\": \"\",\n  \"message\": \"\",\n  \"data\": {}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Data",
+      "description": "Retrieve supporting reference data required by Moolre integrations.",
+      "item": [
+        {
+          "name": "Miscellaneous Data",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Fetch real-time system data such as supported banks, mobile money channels, and other configuration data.\n\nDocs route: https://docs.moolre.com/api/data/banks\n\nRequest notes:\n- `country`: Country code (e.g., gha).\n- `data`: Type of data to fetch (e.g., banks).",
+            "url": {
+              "raw": "{{baseUrl}}/open/transact/data?country=gha&data=banks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "open",
+                "transact",
+                "data"
+              ],
+              "query": [
+                {
+                  "key": "country",
+                  "value": "gha",
+                  "description": "Country code (e.g., gha).",
+                  "disabled": false
+                },
+                {
+                  "key": "data",
+                  "value": "banks",
+                  "description": "Type of data to fetch (e.g., banks).",
+                  "disabled": false
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "200 - Success",
+              "originalRequest": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/open/transact/data?country=gha&data=banks",
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "path": [
+                    "open",
+                    "transact",
+                    "data"
+                  ],
+                  "query": [
+                    {
+                      "key": "country",
+                      "value": "gha",
+                      "description": "Country code (e.g., gha).",
+                      "disabled": false
+                    },
+                    {
+                      "key": "data",
+                      "value": "banks",
+                      "description": "Type of data to fetch (e.g., banks).",
+                      "disabled": false
+                    }
+                  ]
+                }
+              },
+              "status": "Success",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": 1,\n  \"code\": \"SD01\",\n  \"message\": \"Banks Found\",\n  \"data\": [\n    {\n      \"name\": \"ABSA BANK GHANA LTD\",\n      \"code\": \"030100\"\n    },\n    {\n      \"name\": \"ACCESS BANK GHANA LTD\",\n      \"code\": \"030402\"\n    },\n    {\n      \"name\": \"ADB BANK GHANA LTD\",\n      \"code\": \"030301\"\n    }\n  ],\n  \"go\": null\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.moolre.com",
+      "type": "default"
+    },
+    {
+      "key": "apiUser",
+      "value": "Your Username",
+      "type": "default"
+    },
+    {
+      "key": "apiKey",
+      "value": "YOUR_PRIVATE_API_KEY",
+      "type": "default"
+    },
+    {
+      "key": "apiPublicKey",
+      "value": "YOUR_PUBLIC_API_KEY",
+      "type": "default"
+    },
+    {
+      "key": "smsVasKey",
+      "value": "YOUR_SMS_X_API_VASKEY",
+      "type": "default"
+    },
+    {
+      "key": "whatsAppVasKey",
+      "value": "YOUR_WHATSAPP_X_API_VASKEY",
+      "type": "default"
+    },
+    {
+      "key": "accountNumber",
+      "value": "YOUR_MOOLRE_ACCOUNT_NUMBER",
+      "type": "default"
+    },
+    {
+      "key": "receiverAccountNumber",
+      "value": "RECIPIENT_MOOLRE_ACCOUNT_NUMBER",
+      "type": "default"
+    },
+    {
+      "key": "callbackUrl",
+      "value": "https://example.com/webhooks/moolre",
+      "type": "default"
+    }
+  ]
+}

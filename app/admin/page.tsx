@@ -123,7 +123,7 @@ export default function AdminPage() {
   async function setPayment(row: IndexRow, paymentStatus: PaymentStatus) {
     let paystackReference: string | undefined;
     if (paymentStatus === "paid") {
-      const entered = window.prompt("Paystack reference (optional)", row.reference);
+      const entered = window.prompt("Payment reference (optional)", row.reference);
       if (entered === null) return;
       paystackReference = entered.trim();
     }
@@ -144,6 +144,31 @@ export default function AdminPage() {
       return;
     }
     await load(secret);
+  }
+
+  async function deleteUser(row: IndexRow) {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete registration for ${row.name} (${row.reference})? This will free up ${row.seats} seat(s) and cannot be undone.`
+    );
+    if (!confirmDelete) return;
+
+    setBusyId(row.id);
+    setError("");
+    try {
+      const response = await adminFetch(`/api/admin/registrations/${row.id}`, secret, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        const body = (await response.json().catch(() => null)) as { error?: string } | null;
+        setError(body?.error || "Could not delete that registration.");
+        return;
+      }
+      await load(secret);
+    } catch {
+      setError("Network error deleting registration.");
+    } finally {
+      setBusyId("");
+    }
   }
 
   async function exportCsv() {
@@ -205,7 +230,7 @@ export default function AdminPage() {
       </div>
 
       <p className="note">
-        Paystack is not connected yet. Pending emails can receive a payment reminder later. Seats stay reserved while payment status is pending.
+        Pending attendee seats stay reserved while payment status is pending.
       </p>
       {error ? <div className="error">{error}</div> : null}
 
@@ -335,6 +360,15 @@ export default function AdminPage() {
                         onClick={() => setPayment(row, "pending")}
                       >
                         Awaiting payment
+                      </button>
+                      <button
+                        className="btn tiny danger"
+                        type="button"
+                        style={{ color: "#b91c1c", borderColor: "#fecaca", background: "#fef2f2" }}
+                        disabled={busyId === row.id}
+                        onClick={() => deleteUser(row)}
+                      >
+                        Delete
                       </button>
                     </div>
                   </td>
