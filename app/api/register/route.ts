@@ -2,7 +2,7 @@ import { noStoreJson } from "@/lib/auth";
 import { ticketById } from "@/lib/constants";
 import { createMoolrePaymentLink, isMoolreConfigured, type MoolreCollectionChannel } from "@/lib/moolre";
 import { allowRegister, clientKey } from "@/lib/rate-limit";
-import { RegistrationError, createRegistration, getRegistration, sendRegistrationEmail, updateRegistration } from "@/lib/registrations";
+import { RegistrationError, createRegistration, getRegistration, runInBackground, sendRegistrationEmail, updateRegistration } from "@/lib/registrations";
 import { validateRegister } from "@/lib/validate";
 
 export const runtime = "nodejs";
@@ -58,12 +58,11 @@ export async function POST(request: Request) {
     }
 
     if (parsed.value.email) {
-      try {
-        const fresh = await getRegistration(saved.id);
+      const savedId = saved.id;
+      runInBackground(async () => {
+        const fresh = await getRegistration(savedId);
         if (fresh) await sendRegistrationEmail(fresh, "reserved");
-      } catch {
-        // email must never block registration
-      }
+      });
     }
 
     return noStoreJson(

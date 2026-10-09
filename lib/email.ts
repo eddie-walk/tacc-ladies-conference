@@ -1,3 +1,5 @@
+import nodemailer from "nodemailer";
+
 export type SendEmailInput = { to: string; subject: string; html: string; text: string };
 export type SendEmailResult = { ok: boolean; skipped?: boolean; error?: string };
 
@@ -8,16 +10,42 @@ let warnedMissingKey = false;
 
 export async function sendEmail(input: SendEmailInput): Promise<SendEmailResult> {
   try {
+    const gmailUser = process.env.GMAIL_USER?.trim();
+    const gmailPass = process.env.GMAIL_APP_PASSWORD?.replace(/\s+/g, "");
     const key = process.env.RESEND_API_KEY?.trim();
-    if (!key) {
+    if (!(gmailUser && gmailPass) && !key) {
       if (!warnedMissingKey) {
         warnedMissingKey = true;
-        console.warn("RESEND_API_KEY is not set; confirmation emails are skipped.");
+        console.warn("No email transport configured; confirmation emails are skipped.");
       }
       return { ok: false, skipped: true };
     }
     const to = input.to.trim();
     if (!to) return { ok: false, skipped: true };
+    if (gmailUser && gmailPass) {
+      const transport = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: { user: gmailUser, pass: gmailPass },
+        connectionTimeout: 8000,
+        greetingTimeout: 8000,
+        socketTimeout: 8000,
+      });
+      try {
+        await transport.sendMail({
+          from: `TACC Ladies Conference <${gmailUser}>`,
+          to,
+          replyTo: process.env.EMAIL_REPLY_TO?.trim() || gmailUser,
+          subject: input.subject,
+          html: input.html,
+          text: input.text,
+        });
+        return { ok: true };
+      } finally {
+        transport.close();
+      }
+    }
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },

@@ -2,6 +2,7 @@ import { randomBytes, randomInt } from "crypto";
 import fs from "fs/promises";
 import path from "path";
 import { BlobNotFoundError, BlobPreconditionFailedError, del, get, put } from "@vercel/blob";
+import { after } from "next/server";
 import { sendEmail } from "./email";
 import { buildEmail, type EmailKind } from "./email-templates";
 import { SEAT_TARGET, ticketById } from "./constants";
@@ -346,11 +347,21 @@ export async function sendRegistrationEmail(
   }
 }
 
+/** Runs work after the response is sent; falls back to a bounded inline await outside a request. Never throws. */
+export function runInBackground(task: () => Promise<unknown>): void {
+  const safe = () => task().catch(() => undefined);
+  try {
+    after(safe);
+  } catch {
+    void safe();
+  }
+}
+
 export async function updateRegistration(id: string, patch: RegistrationPatch): Promise<RegistrationRecord> {
   const before = patch.paymentStatus ? await getRegistration(id).catch(() => null) : null;
   const updated = await rawUpdateRegistration(id, patch);
   if (patch.paymentStatus === "paid" && before && before.paymentStatus !== "paid" && updated.paymentStatus === "paid") {
-    await sendRegistrationEmail(updated, "confirmed");
+    runInBackground(() => sendRegistrationEmail(updated, "confirmed"));
   }
   return updated;
 }
