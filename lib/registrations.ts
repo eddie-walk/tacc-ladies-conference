@@ -426,21 +426,3 @@ export async function getRegistration(id: string): Promise<RegistrationRecord | 
   const stored = await readJson<RegistrationRecord>(recordPath(id));
   return stored?.value ?? null;
 }
-
-export async function importRegistrationsTemp(records: RegistrationRecord[]): Promise<{ imported: number; skipped: number; errors: number }> {
-  return enqueue(async () => {
-    let imported = 0, skipped = 0, errors = 0;
-    for (const rec of records) {
-      try {
-        const index = await readIndex();
-        if (index.value.rows.some((r) => r.id === rec.id || r.reference === rec.reference)) { skipped += 1; continue; }
-        await writeJson(recordPath(rec.id), rec, null);
-        await writeJson(INDEX_PATH, { rows: [...index.value.rows, toRow(rec)] }, index.etag);
-        imported += 1;
-      } catch {
-        errors += 1;
-      }
-    }
-    return { imported, skipped, errors };
-  });
-}
