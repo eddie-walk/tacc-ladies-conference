@@ -2,6 +2,8 @@ import { randomBytes, randomInt } from "crypto";
 import fs from "fs/promises";
 import path from "path";
 import { BlobNotFoundError, BlobPreconditionFailedError, del, get, put } from "@vercel/blob";
+import { sendEmail } from "./email";
+import { buildEmail, type EmailKind } from "./email-templates";
 import { SEAT_TARGET, ticketById } from "./constants";
 import type { IndexFile, IndexRow, PaymentStatus, RegisterInput, RegistrationPatch, RegistrationRecord } from "./types";
 
@@ -309,6 +311,8 @@ function applyPatch(record: RegistrationRecord, patch: RegistrationPatch): Regis
   const next: RegistrationRecord = { ...record, updatedAt: new Date().toISOString() };
   if ("notes" in patch) next.notes = cleanOptional(patch.notes ?? null, 500);
   if ("paystackReference" in patch) next.paystackReference = cleanOptional(patch.paystackReference ?? null, 80);
+  if ("reservationEmailSentAt" in patch) next.reservationEmailSentAt = patch.reservationEmailSentAt ?? null;
+  if ("confirmationEmailSentAt" in patch) next.confirmationEmailSentAt = patch.confirmationEmailSentAt ?? null;
   if (patch.paymentStatus) {
     next.paymentStatus = patch.paymentStatus;
     if (patch.paymentStatus === "paid") {
@@ -322,7 +326,36 @@ function applyPatch(record: RegistrationRecord, patch: RegistrationPatch): Regis
   return next;
 }
 
+/** Sends the reservation or confirmation email and records the send time. Never throws. */
+export async function sendRegistrationEmail(
+  record: RegistrationRecord,
+  kind: EmailKind,
+  force = false,
+): Promise<{ ok: boolean; skipped?: boolean; error?: string }> {
+  try {
+    const sentField = kind === "confirmed" ? "confirmationEmailSentAt" : "reservationEmailSentAt";
+    if (!force && record[sentField]) return { ok: false, skipped: true };
+    if (!record.email?.trim()) return { ok: false, skipped: true };
+    const result = await sendEmail({ to: record.email, ...buildEmail(kind, record) });
+    if (result.ok) {
+      await rawUpdateRegistration(record.id, { [sentField]: new Date().toISOString() }).catch(() => undefined);
+    }
+    return result;
+  } catch {
+    return { ok: false, error: "Email could not be sent." };
+  }
+}
+
 export async function updateRegistration(id: string, patch: RegistrationPatch): Promise<RegistrationRecord> {
+  const before = patch.paymentStatus ? await getRegistration(id).catch(() => null) : null;
+  const updated = await rawUpdateRegistration(id, patch);
+  if (patch.paymentStatus === "paid" && before && before.paymentStatus !== "paid" && updated.paymentStatus === "paid") {
+    await sendRegistrationEmail(updated, "confirmed");
+  }
+  return updated;
+}
+
+async function rawUpdateRegistration(id: string, patch: RegistrationPatch): Promise<RegistrationRecord> {
   const path = recordPath(id);
   return enqueue(async () => {
     for (let attempt = 0; attempt < 6; attempt += 1) {

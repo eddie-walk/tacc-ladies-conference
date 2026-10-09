@@ -29,6 +29,8 @@ export type RegistrationRecord = {
   paystackReference: string | null;
   amountPaidGhs: number | null;
   notes: string | null;
+  reservationEmailSentAt?: string | null;
+  confirmationEmailSentAt?: string | null;
 };
 
 /** Lightweight index row. priceGhs and amountPaidGhs support revenue stats without re-reading every blob. */
@@ -72,4 +74,6 @@ export type RegistrationPatch = {
   paymentStatus?: PaymentStatus;
   paystackReference?: string | null;
   notes?: string | null;
+  reservationEmailSentAt?: string | null;
+  confirmationEmailSentAt?: string | null;
 };

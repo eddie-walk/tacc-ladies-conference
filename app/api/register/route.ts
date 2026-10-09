@@ -2,7 +2,7 @@ import { noStoreJson } from "@/lib/auth";
 import { ticketById } from "@/lib/constants";
 import { createMoolrePaymentLink, isMoolreConfigured, type MoolreCollectionChannel } from "@/lib/moolre";
 import { allowRegister, clientKey } from "@/lib/rate-limit";
-import { RegistrationError, createRegistration, updateRegistration } from "@/lib/registrations";
+import { RegistrationError, createRegistration, getRegistration, sendRegistrationEmail, updateRegistration } from "@/lib/registrations";
 import { validateRegister } from "@/lib/validate";
 
 export const runtime = "nodejs";
@@ -54,6 +54,15 @@ export async function POST(request: Request) {
         promptMessage = "Your seat reservation is held. Complete payment below via Mobile Money to secure your pass.";
       } else {
         paymentError = link.error || "Payment link could not be created.";
+      }
+    }
+
+    if (parsed.value.email) {
+      try {
+        const fresh = await getRegistration(saved.id);
+        if (fresh) await sendRegistrationEmail(fresh, "reserved");
+      } catch {
+        // email must never block registration
       }
     }
 
