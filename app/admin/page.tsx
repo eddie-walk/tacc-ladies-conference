@@ -51,6 +51,8 @@ function Bars({ items }: { items: { label: string; value: number }[] }) {
 export default function AdminPage() {
   const [ready, setReady] = useState(false);
   const [secret, setSecret] = useState("");
+  const [rechecking, setRechecking] = useState(false);
+  const [notice, setNotice] = useState("");
   const [draft, setDraft] = useState("");
   const [gateError, setGateError] = useState("");
   const [stats, setStats] = useState<StatsPayload | null>(null);
@@ -171,6 +173,31 @@ export default function AdminPage() {
     }
   }
 
+  async function recheckPending() {
+    setRechecking(true);
+    setError("");
+    setNotice("");
+    try {
+      const response = await adminFetch("/api/admin/registrations/recheck", secret, { method: "POST" });
+      const body = (await response.json().catch(() => null)) as
+        | { checked?: number; markedPaid?: number; stillPending?: number; errors?: unknown[]; error?: string }
+        | null;
+      if (!response.ok || !body) {
+        setError(body?.error || "Could not re-check pending payments.");
+      } else {
+        setNotice(
+          `Checked ${body.checked ?? 0} pending: ${body.markedPaid ?? 0} marked paid, ${body.stillPending ?? 0} still pending` +
+            (body.errors?.length ? `, ${body.errors.length} errors.` : ".")
+        );
+        await load(secret);
+      }
+    } catch {
+      setError("Network error re-checking payments.");
+    } finally {
+      setRechecking(false);
+    }
+  }
+
   async function exportCsv() {
     const response = await adminFetch("/api/admin/export", secret);
     if (!response.ok) {
@@ -220,6 +247,9 @@ export default function AdminPage() {
           <p className="sub">The Next Her · Saturday 17 October 2026 · 11:00 am</p>
         </div>
         <div className="tools">
+          <button className="btn" type="button" onClick={recheckPending} disabled={rechecking}>
+            {rechecking ? "Re-checking…" : "Re-check pending payments"}
+          </button>
           <button className="btn" type="button" onClick={exportCsv}>
             Export CSV
           </button>
@@ -232,6 +262,7 @@ export default function AdminPage() {
       <p className="note">
         Pending attendee seats stay reserved while payment status is pending.
       </p>
+      {notice ? <div className="note">{notice}</div> : null}
       {error ? <div className="error">{error}</div> : null}
 
       <section className="cards">
